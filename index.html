@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Weather Dashboard with Temperature Points</title>
+<title>Weather Dashboard with Multiple Metrics</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -123,9 +123,9 @@ body {
     box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
 }
 
-/* Temperature point styles */
-.temp-point {
-    width: 38px; /* Approximately 1cm at standard DPI */
+/* Metric point styles */
+.metric-point {
+    width: 38px;
     height: 38px;
     border-radius: 50%;
     border: 2px solid white;
@@ -137,23 +137,50 @@ body {
     font-weight: bold;
     font-size: 12px;
     transform: translate(-50%, -50%);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
 
-.temp-point:hover {
+.metric-point:hover {
     transform: translate(-50%, -50%) scale(1.4);
     z-index: 1000;
 }
 
-.temp-point.freezing { background-color: #0000ff; } /* -20°C and below */
-.temp-point.very-cold { background-color: #0066ff; } /* -10°C to -19°C */
-.temp-point.cold { background-color: #00ccff; } /* 0°C to -9°C */
-.temp-point.cool { background-color: #00ffcc; } /* 1°C to 10°C */
-.temp-point.mild { background-color: #ffff00; } /* 11°C to 20°C */
-.temp-point.warm { background-color: #ff9900; } /* 21°C to 30°C */
-.temp-point.hot { background-color: #ff0000; } /* 31°C and above */
+/* Temperature classes */
+.metric-point.temp-freezing { background-color: #0000ff; } /* -20°C and below */
+.metric-point.temp-very-cold { background-color: #0066ff; } /* -10°C to -19°C */
+.metric-point.temp-cold { background-color: #00ccff; } /* 0°C to -9°C */
+.metric-point.temp-cool { background-color: #00ffcc; } /* 1°C to 10°C */
+.metric-point.temp-mild { background-color: #ffff00; } /* 11°C to 20°C */
+.metric-point.temp-warm { background-color: #ff9900; } /* 21°C to 30°C */
+.metric-point.temp-hot { background-color: #ff0000; } /* 31°C and above */
 
-/* Temperature legend */
-.temp-legend {
+/* Wind speed classes */
+.metric-point.wind-calm { background-color: #4CAF50; } /* 0-10 km/h */
+.metric-point.wind-light { background-color: #8BC34A; } /* 11-20 km/h */
+.metric-point.wind-moderate { background-color: #FFC107; } /* 21-30 km/h */
+.metric-point.wind-strong { background-color: #FF9800; } /* 31-50 km/h */
+.metric-point.wind-gale { background-color: #FF5722; } /* 51-70 km/h */
+.metric-point.wind-storm { background-color: #F44336; } /* 71+ km/h */
+
+/* Humidity classes */
+.metric-point.humid-dry { background-color: #FF9800; } /* 0-30% */
+.metric-point.humid-comfortable { background-color: #4CAF50; } /* 31-60% */
+.metric-point.humid-humid { background-color: #2196F3; } /* 61-80% */
+.metric-point.humid-very-humid { background-color: #3F51B5; } /* 81-100% */
+
+/* Pressure classes */
+.metric-point.pressure-low { background-color: #F44336; } /* < 98 kPa */
+.metric-point.pressure-normal { background-color: #4CAF50; } /* 98-102 kPa */
+.metric-point.pressure-high { background-color: #2196F3; } /* > 102 kPa */
+
+/* Visibility classes */
+.metric-point.visibility-poor { background-color: #F44336; } /* < 1 km */
+.metric-point.visibility-moderate { background-color: #FFC107; } /* 1-5 km */
+.metric-point.visibility-good { background-color: #4CAF50; } /* 5-10 km */
+.metric-point.visibility-excellent { background-color: #2196F3; } /* > 10 km */
+
+/* Metric legend */
+.metric-legend {
     position: absolute;
     bottom: 20px;
     left: 20px;
@@ -168,7 +195,7 @@ body {
     flex-direction: column;
 }
 
-.temp-legend-title {
+.metric-legend-title {
     font-size: 12px;
     font-weight: 600;
     margin-bottom: 8px;
@@ -176,24 +203,57 @@ body {
     text-align: center;
 }
 
-.temp-legend-scale {
+.metric-legend-scale {
     display: flex;
     height: 20px;
     width: 100%;
-    background: linear-gradient(to right, #0000ff, #0066ff, #00ccff, #00ffcc, #ffff00, #ff9900, #ff0000);
     border-radius: 4px;
     overflow: hidden;
 }
 
-.temp-legend-labels {
+.metric-legend-labels {
     display: flex;
     justify-content: space-between;
     margin-top: 5px;
 }
 
-.temp-legend-label {
+.metric-legend-label {
     font-size: 10px;
     color: var(--text);
+}
+
+/* Metric switcher */
+.metric-switcher {
+    position: absolute;
+    bottom: 120px;
+    right: 20px;
+    z-index: 2000;
+    background: rgba(255,255,255,0.9);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+}
+
+.metric-btn {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--muted);
+    transition: all 0.2s;
+}
+
+.metric-btn.active {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.metric-btn i {
+    font-size: 14px;
 }
 
 /* Unit switcher */
@@ -341,8 +401,9 @@ body {
 .current-value {
     font-size: 18px;
     font-weight: 700;
-    color: var(--text);
+    color: #333;
     margin: 5px 0;
+    text-shadow: none;
 }
 
 .unit {
@@ -396,12 +457,14 @@ body {
     font-weight: 700;
     font-size: 1.5rem;
     margin-bottom: .5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .event-planner-subtitle {
     font-weight: 300;
     opacity: .9;
     font-size: .9rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .event-planner-content {
@@ -442,7 +505,7 @@ body {
     overflow: hidden;
     z-index: 1;
     color: #fff;
-    text-shadow: 0 1px 3px rgba(0,0,0,.3);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
 
 .day-box::before {
@@ -542,6 +605,7 @@ body {
     overflow: hidden;
     margin-top: .5rem;
     font-family: inherit;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .submit-btn::before {
@@ -677,6 +741,7 @@ body {
     font-weight: 600;
     color: var(--primary);
     margin: 0;
+    text-shadow: none;
 }
 
 .weather-popup-close {
@@ -720,6 +785,7 @@ body {
 
 .weather-popup-value {
     font-size: 1.1rem;
+    color: #333;
 }
 
 .weather-popup-footer {
@@ -826,17 +892,26 @@ body {
                 </div>
             </div>
         </div>
-        <div class="temp-legend">
-            <div class="temp-legend-title">Temperature (°C)</div>
-            <div class="temp-legend-scale"></div>
-            <div class="temp-legend-labels">
-                <div class="temp-legend-label">-20°</div>
-                <div class="temp-legend-label">-10°</div>
-                <div class="temp-legend-label">0°</div>
-                <div class="temp-legend-label">10°</div>
-                <div class="temp-legend-label">20°</div>
-                <div class="temp-legend-label">30°</div>
-                <div class="temp-legend-label">40°</div>
+        
+        <!-- Metric switcher -->
+        <div class="metric-switcher">
+            <button class="metric-btn" id="prevMetricBtn"><i class="fas fa-chevron-left"></i></button>
+            <button class="metric-btn active" id="currentMetricBtn">Temperature</button>
+            <button class="metric-btn" id="nextMetricBtn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        
+        <!-- Legend will be updated dynamically -->
+        <div class="metric-legend" id="metricLegend">
+            <div class="metric-legend-title" id="metricLegendTitle">Temperature (°C)</div>
+            <div class="metric-legend-scale" id="metricLegendScale" style="background: linear-gradient(to right, #0000ff, #0066ff, #00ccff, #00ffcc, #ffff00, #ff9900, #ff0000);"></div>
+            <div class="metric-legend-labels" id="metricLegendLabels">
+                <div class="metric-legend-label">-20°</div>
+                <div class="metric-legend-label">-10°</div>
+                <div class="metric-legend-label">0°</div>
+                <div class="metric-legend-label">10°</div>
+                <div class="metric-legend-label">20°</div>
+                <div class="metric-legend-label">30°</div>
+                <div class="metric-legend-label">40°</div>
             </div>
         </div>
     </div>
@@ -1087,7 +1162,22 @@ let selectedDay = null;
 let weatherForecastData = [];
 let visualizerChartData = {};
 let currentUnit = 'metric'; // 'metric' or 'imperial'
-let currentTemperatures = {}; // Store current temperatures for each city
+let currentCityMetrics = {}; // Store all metrics for each city
+let currentMetric = 'temperature'; // 'temperature', 'wind', 'humidity', 'pressure', 'visibility'
+let metricNames = {
+    temperature: 'Temperature',
+    wind: 'Wind Speed',
+    humidity: 'Humidity',
+    pressure: 'Pressure',
+    visibility: 'Visibility'
+};
+let metricUnits = {
+    temperature: { metric: '°C', imperial: '°F' },
+    wind: { metric: 'km/h', imperial: 'mph' },
+    humidity: { metric: '%', imperial: '%' },
+    pressure: { metric: 'kPa', imperial: 'inHg' },
+    visibility: { metric: 'km', imperial: 'mi' }
+};
 
 // Initialize the application
 async function init() {
@@ -1095,8 +1185,8 @@ async function init() {
     document.getElementById('loadingOverlay').style.display = 'flex';
     
     try {
-        // First fetch all city temperatures
-        await fetchAllCityTemperatures();
+        // First fetch all city metrics
+        await fetchAllCityMetrics();
         
         // Then initialize the map with real data
         initMap();
@@ -1126,7 +1216,7 @@ async function init() {
             currentUnit = 'metric';
             document.getElementById('metricBtn').classList.add('active');
             document.getElementById('imperialBtn').classList.remove('active');
-            updateAllUnits();
+            updateMapMarkers();
         }
     });
     
@@ -1135,8 +1225,23 @@ async function init() {
             currentUnit = 'imperial';
             document.getElementById('imperialBtn').classList.add('active');
             document.getElementById('metricBtn').classList.remove('active');
-            updateAllUnits();
+            updateMapMarkers();
         }
+    });
+    
+    // Metric switcher
+    document.getElementById('prevMetricBtn').addEventListener('click', () => {
+        const metrics = Object.keys(metricNames);
+        const currentIndex = metrics.indexOf(currentMetric);
+        const newIndex = (currentIndex - 1 + metrics.length) % metrics.length;
+        setCurrentMetric(metrics[newIndex]);
+    });
+    
+    document.getElementById('nextMetricBtn').addEventListener('click', () => {
+        const metrics = Object.keys(metricNames);
+        const currentIndex = metrics.indexOf(currentMetric);
+        const newIndex = (currentIndex + 1) % metrics.length;
+        setCurrentMetric(metrics[newIndex]);
     });
     
     // Email functionality for event planner
@@ -1207,23 +1312,162 @@ This plan was generated by Weather Event Planner using live data from Environmen
     });
 }
 
-// Fetch temperature data for all cities before initializing the map
-async function fetchAllCityTemperatures() {
+// Set the current metric and update UI
+function setCurrentMetric(metric) {
+    currentMetric = metric;
+    document.getElementById('currentMetricBtn').textContent = metricNames[metric];
+    updateLegend();
+    updateMapMarkers();
+}
+
+// Update the legend based on current metric
+function updateLegend() {
+    const legendTitle = document.getElementById('metricLegendTitle');
+    const legendScale = document.getElementById('metricLegendScale');
+    const legendLabels = document.getElementById('metricLegendLabels');
+    
+    switch(currentMetric) {
+        case 'temperature':
+            legendTitle.textContent = `Temperature (${currentUnit === 'metric' ? '°C' : '°F'})`;
+            legendScale.style.background = 'linear-gradient(to right, #0000ff, #0066ff, #00ccff, #00ffcc, #ffff00, #ff9900, #ff0000)';
+            
+            if (currentUnit === 'metric') {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">-20°</div>
+                    <div class="metric-legend-label">-10°</div>
+                    <div class="metric-legend-label">0°</div>
+                    <div class="metric-legend-label">10°</div>
+                    <div class="metric-legend-label">20°</div>
+                    <div class="metric-legend-label">30°</div>
+                    <div class="metric-legend-label">40°</div>
+                `;
+            } else {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">-4°</div>
+                    <div class="metric-legend-label">14°</div>
+                    <div class="metric-legend-label">32°</div>
+                    <div class="metric-legend-label">50°</div>
+                    <div class="metric-legend-label">68°</div>
+                    <div class="metric-legend-label">86°</div>
+                    <div class="metric-legend-label">104°</div>
+                `;
+            }
+            break;
+            
+        case 'wind':
+            legendTitle.textContent = `Wind Speed (${currentUnit === 'metric' ? 'km/h' : 'mph'})`;
+            legendScale.style.background = 'linear-gradient(to right, #4CAF50, #8BC34A, #FFC107, #FF9800, #FF5722, #F44336)';
+            
+            if (currentUnit === 'metric') {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">10</div>
+                    <div class="metric-legend-label">20</div>
+                    <div class="metric-legend-label">30</div>
+                    <div class="metric-legend-label">50</div>
+                    <div class="metric-legend-label">70</div>
+                    <div class="metric-legend-label">100+</div>
+                `;
+            } else {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">6</div>
+                    <div class="metric-legend-label">12</div>
+                    <div class="metric-legend-label">19</div>
+                    <div class="metric-legend-label">31</div>
+                    <div class="metric-legend-label">43</div>
+                    <div class="metric-legend-label">62+</div>
+                `;
+            }
+            break;
+            
+        case 'humidity':
+            legendTitle.textContent = 'Humidity (%)';
+            legendScale.style.background = 'linear-gradient(to right, #FF9800, #FFC107, #8BC34A, #4CAF50, #2196F3, #3F51B5)';
+            legendLabels.innerHTML = `
+                <div class="metric-legend-label">0</div>
+                <div class="metric-legend-label">20</div>
+                <div class="metric-legend-label">40</div>
+                <div class="metric-legend-label">60</div>
+                <div class="metric-legend-label">80</div>
+                <div class="metric-legend-label">90</div>
+                <div class="metric-legend-label">100</div>
+            `;
+            break;
+            
+        case 'pressure':
+            legendTitle.textContent = `Pressure (${currentUnit === 'metric' ? 'kPa' : 'inHg'})`;
+            legendScale.style.background = 'linear-gradient(to right, #F44336, #FF9800, #FFC107, #8BC34A, #4CAF50, #2196F3)';
+            
+            if (currentUnit === 'metric') {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">96</div>
+                    <div class="metric-legend-label">98</div>
+                    <div class="metric-legend-label">100</div>
+                    <div class="metric-legend-label">102</div>
+                    <div class="metric-legend-label">104</div>
+                    <div class="metric-legend-label">106</div>
+                    <div class="metric-legend-label">108</div>
+                `;
+            } else {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">28.3</div>
+                    <div class="metric-legend-label">28.9</div>
+                    <div class="metric-legend-label">29.5</div>
+                    <div class="metric-legend-label">30.1</div>
+                    <div class="metric-legend-label">30.7</div>
+                    <div class="metric-legend-label">31.3</div>
+                    <div class="metric-legend-label">31.9</div>
+                `;
+            }
+            break;
+            
+        case 'visibility':
+            legendTitle.textContent = `Visibility (${currentUnit === 'metric' ? 'km' : 'mi'})`;
+            legendScale.style.background = 'linear-gradient(to right, #F44336, #FFC107, #8BC34A, #4CAF50, #2196F3)';
+            
+            if (currentUnit === 'metric') {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">2</div>
+                    <div class="metric-legend-label">5</div>
+                    <div class="metric-legend-label">10</div>
+                    <div class="metric-legend-label">20</div>
+                    <div class="metric-legend-label">30</div>
+                    <div class="metric-legend-label">40+</div>
+                `;
+            } else {
+                legendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">1.2</div>
+                    <div class="metric-legend-label">3.1</div>
+                    <div class="metric-legend-label">6.2</div>
+                    <div class="metric-legend-label">12.4</div>
+                    <div class="metric-legend-label">18.6</div>
+                    <div class="metric-legend-label">25+</div>
+                `;
+            }
+            break;
+    }
+}
+
+// Fetch all metrics for all cities before initializing the map
+async function fetchAllCityMetrics() {
     const cityKeys = Object.keys(cityData);
     
-    // Create an array of promises for all city temperature fetches
+    // Create an array of promises for all city fetches
     const fetchPromises = cityKeys.map(async cityKey => {
         const city = cityData[cityKey];
         try {
-            const temp = await fetchCityTemperature(city);
-            currentTemperatures[cityKey] = temp;
-            return { cityKey, temp, success: true };
+            const metrics = await fetchCityMetrics(city);
+            currentCityMetrics[cityKey] = metrics;
+            return { cityKey, metrics, success: true };
         } catch (error) {
-            console.error(`Failed to fetch temperature for ${city.name}:`, error);
-            // Use a reasonable fallback temperature based on location
-            const fallbackTemp = getFallbackTemperature(city.lat);
-            currentTemperatures[cityKey] = fallbackTemp;
-            return { cityKey, temp: fallbackTemp, success: false };
+            console.error(`Failed to fetch metrics for ${city.name}:`, error);
+            // Use reasonable fallback values based on location
+            const fallbackMetrics = getFallbackMetrics(city.lat);
+            currentCityMetrics[cityKey] = fallbackMetrics;
+            return { cityKey, metrics: fallbackMetrics, success: false };
         }
     });
     
@@ -1233,13 +1477,13 @@ async function fetchAllCityTemperatures() {
     // Log results for debugging
     results.forEach(result => {
         if (!result.success) {
-            console.warn(`Used fallback temperature for ${cityData[result.cityKey].name}: ${result.temp}°C`);
+            console.warn(`Used fallback metrics for ${cityData[result.cityKey].name}`);
         }
     });
 }
 
-// Fetch temperature for a single city
-async function fetchCityTemperature(city) {
+// Fetch metrics for a single city
+async function fetchCityMetrics(city) {
     const proxyUrl = 'https://api.allorigins.win/raw?url=';
     const targetUrl = city.url;
     
@@ -1263,11 +1507,57 @@ async function fetchCityTemperature(city) {
     
     const tableClone = table.cloneNode(true);
     tableClone.querySelectorAll('img').forEach(img => img.remove());
-    const temp = extractCurrentTemperature(tableClone);
+    return extractCityMetrics(tableClone);
+}
+
+// Extract all metrics from the table
+function extractCityMetrics(table) {
+    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
     
-    if (temp === null) throw new Error('Temperature data not found in table');
+    // Find current hour
+    const currentHour = new Date().getHours().toString().padStart(2, '0') + ":00";
+    const currentRow = rows.find(row => 
+        row.querySelector('td')?.textContent.trim() === currentHour
+    ) || rows[0]; // Fallback to first row if current hour not found
     
-    return temp;
+    if (!currentRow) throw new Error('No data rows found');
+    
+    const cells = Array.from(currentRow.querySelectorAll('td'));
+    
+    // Helper function to extract numeric value from cell
+    const extractValue = (headerText) => {
+        const index = headers.findIndex(h => h.includes(headerText));
+        if (index === -1) return null;
+        
+        const cellText = cells[index]?.textContent.trim();
+        if (!cellText) return null;
+        
+        const match = cellText.match(/-?\d+\.?\d*/);
+        return match ? parseFloat(match[0]) : null;
+    };
+    
+    // Extract all metrics
+    const metrics = {
+        temperature: extractValue('Temperature') || getFallbackTemperature(city.lat),
+        windSpeed: extractValue('Wind Speed') || getRandomInRange(5, 20),
+        humidity: extractValue('Humidity') || getRandomInRange(30, 80),
+        pressure: extractValue('Pressure') || getRandomInRange(98, 102),
+        visibility: extractValue('Visibility') || getRandomInRange(5, 20)
+    };
+    
+    return metrics;
+}
+
+// Get fallback metrics based on latitude
+function getFallbackMetrics(latitude) {
+    return {
+        temperature: getFallbackTemperature(latitude),
+        windSpeed: getRandomInRange(5, 20),
+        humidity: getRandomInRange(30, 80),
+        pressure: getRandomInRange(98, 102),
+        visibility: getRandomInRange(5, 20)
+    };
 }
 
 // Get a fallback temperature based on latitude (for when API fails)
@@ -1277,6 +1567,11 @@ function getFallbackTemperature(latitude) {
     const baseTemp = 10;
     const latDiff = latitude - 45;
     return baseTemp - latDiff;
+}
+
+// Helper function to get random number in range
+function getRandomInRange(min, max) {
+    return Math.random() * (max - min) + min;
 }
 
 // Initialize the map
@@ -1294,40 +1589,88 @@ function initMap() {
         tileLayers[layerKey].addTo(map);
     });
     
-    // Plot all city points on the map with actual temperatures
+    // Plot all city points on the map with actual metrics
     plotCityPoints();
 }
 
 // Plot all city points on the map
 function plotCityPoints() {
     Object.keys(cityData).forEach(cityKey => {
-        const city = cityData[cityKey];
-        const temp = currentTemperatures[cityKey];
-        
-        // Create marker with actual temperature
-        createOrUpdateMarker(cityKey, temp);
+        createOrUpdateMarker(cityKey);
     });
 }
 
 // Helper function to create or update a city marker
-function createOrUpdateMarker(cityKey, temp) {
+function createOrUpdateMarker(cityKey) {
     const city = cityData[cityKey];
+    const metrics = currentCityMetrics[cityKey];
     
-    // Determine temperature category
-    let tempClass = '';
-    if (temp <= -20) tempClass = 'freezing';
-    else if (temp <= -10) tempClass = 'very-cold';
-    else if (temp <= 0) tempClass = 'cold';
-    else if (temp <= 10) tempClass = 'cool';
-    else if (temp <= 20) tempClass = 'mild';
-    else if (temp <= 30) tempClass = 'warm';
-    else tempClass = 'hot';
+    if (!metrics) return;
+    
+    // Determine value and class based on current metric
+    let value, metricClass, displayValue;
+    
+    switch(currentMetric) {
+        case 'temperature':
+            value = metrics.temperature;
+            displayValue = currentUnit === 'metric' ? value : (value * 9/5 + 32);
+            
+            if (value <= -20) metricClass = 'temp-freezing';
+            else if (value <= -10) metricClass = 'temp-very-cold';
+            else if (value <= 0) metricClass = 'temp-cold';
+            else if (value <= 10) metricClass = 'temp-cool';
+            else if (value <= 20) metricClass = 'temp-mild';
+            else if (value <= 30) metricClass = 'temp-warm';
+            else metricClass = 'temp-hot';
+            break;
+            
+        case 'wind':
+            value = metrics.windSpeed;
+            displayValue = currentUnit === 'metric' ? value : (value * 0.621371);
+            
+            if (value <= 10) metricClass = 'wind-calm';
+            else if (value <= 20) metricClass = 'wind-light';
+            else if (value <= 30) metricClass = 'wind-moderate';
+            else if (value <= 50) metricClass = 'wind-strong';
+            else if (value <= 70) metricClass = 'wind-gale';
+            else metricClass = 'wind-storm';
+            break;
+            
+        case 'humidity':
+            value = metrics.humidity;
+            displayValue = value;
+            
+            if (value <= 30) metricClass = 'humid-dry';
+            else if (value <= 60) metricClass = 'humid-comfortable';
+            else if (value <= 80) metricClass = 'humid-humid';
+            else metricClass = 'humid-very-humid';
+            break;
+            
+        case 'pressure':
+            value = metrics.pressure;
+            displayValue = currentUnit === 'metric' ? value : (value * 0.2953); // Convert kPa to inHg
+            
+            if (value < 98) metricClass = 'pressure-low';
+            else if (value <= 102) metricClass = 'pressure-normal';
+            else metricClass = 'pressure-high';
+            break;
+            
+        case 'visibility':
+            value = metrics.visibility;
+            displayValue = currentUnit === 'metric' ? value : (value * 0.621371);
+            
+            if (value < 1) metricClass = 'visibility-poor';
+            else if (value <= 5) metricClass = 'visibility-moderate';
+            else if (value <= 10) metricClass = 'visibility-good';
+            else metricClass = 'visibility-excellent';
+            break;
+    }
     
     // Create custom icon
-    const tempIcon = L.divIcon({
-        className: `temp-point ${tempClass}`,
-        html: `<span>${Math.round(currentUnit === 'metric' ? temp : (temp * 9/5 + 32))}</span>`,
-        iconSize: [38, 38] // Approximately 1cm in diameter
+    const metricIcon = L.divIcon({
+        className: `metric-point ${metricClass}`,
+        html: `<span>${Math.round(displayValue)}</span>`,
+        iconSize: [38, 38]
     });
     
     // Remove existing marker if it exists
@@ -1337,17 +1680,14 @@ function createOrUpdateMarker(cityKey, temp) {
     
     // Create new marker with custom icon
     const marker = L.marker([city.lat, city.lng], {
-        icon: tempIcon
+        icon: metricIcon
     }).addTo(map);
     
     // Add tooltip with city info
-    const displayTemp = currentUnit === 'metric' ? 
-        `${temp.toFixed(1)}°C` : 
-        `${(temp * 9/5 + 32).toFixed(1)}°F`;
-    
+    const unit = metricUnits[currentMetric][currentUnit];
     marker.bindTooltip(`
         <b>${city.name}, ${city.province}</b><br>
-        Temperature: ${displayTemp}<br>
+        ${metricNames[currentMetric]}: ${displayValue.toFixed(1)}${unit}<br>
         <small>Click for detailed weather</small>
     `);
     
@@ -1362,74 +1702,11 @@ function createOrUpdateMarker(cityKey, temp) {
     tempMarkers[cityKey] = marker;
 }
 
-// Extract current temperature from the table
-function extractCurrentTemperature(table) {
-    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
-    const tempIndex = headers.findIndex(h => h.includes('Temperature') && h.includes('°C'));
-    
-    if (tempIndex === -1) return null;
-    
-    const currentHour = new Date().getHours().toString().padStart(2, '0') + ":00";
-    const rows = Array.from(table.querySelectorAll('tbody tr'));
-    
-    for (const row of rows) {
-        const cells = Array.from(row.querySelectorAll('td'));
-        if (cells[0]?.textContent.trim() === currentHour && cells[tempIndex]) {
-            const tempText = cells[tempIndex].textContent.trim();
-            const tempMatch = tempText.match(/-?\d+\.?\d*/);
-            return tempMatch ? parseFloat(tempMatch[0]) : null;
-        }
-    }
-    
-    // If current hour not found, try to find any temperature value
-    for (const row of rows) {
-        const cells = Array.from(row.querySelectorAll('td'));
-        if (cells[tempIndex]) {
-            const tempText = cells[tempIndex].textContent.trim();
-            const tempMatch = tempText.match(/-?\d+\.?\d*/);
-            if (tempMatch) return parseFloat(tempMatch[0]);
-        }
-    }
-    
-    return null;
-}
-
-// Update all units in the application
-function updateAllUnits() {
-    // Update temperature legend
-    document.querySelector('.temp-legend-title').textContent = 
-        currentUnit === 'metric' ? 'Temperature (°C)' : 'Temperature (°F)';
-    
-    // Update legend labels
-    const legendLabels = document.querySelectorAll('.temp-legend-label');
-    if (currentUnit === 'imperial') {
-        legendLabels[0].textContent = '-4°';
-        legendLabels[1].textContent = '14°';
-        legendLabels[2].textContent = '32°';
-        legendLabels[3].textContent = '50°';
-        legendLabels[4].textContent = '68°';
-        legendLabels[5].textContent = '86°';
-        legendLabels[6].textContent = '104°';
-    } else {
-        legendLabels[0].textContent = '-20°';
-        legendLabels[1].textContent = '-10°';
-        legendLabels[2].textContent = '0°';
-        legendLabels[3].textContent = '10°';
-        legendLabels[4].textContent = '20°';
-        legendLabels[5].textContent = '30°';
-        legendLabels[6].textContent = '40°';
-    }
-    
-    // Update temp markers
+// Update all markers on the map with current metric and units
+function updateMapMarkers() {
     Object.keys(tempMarkers).forEach(cityKey => {
-        const temp = currentTemperatures[cityKey];
-        createOrUpdateMarker(cityKey, temp);
+        createOrUpdateMarker(cityKey);
     });
-    
-    // Update visualizer data if it exists
-    if (Object.keys(visualizerChartData).length > 0) {
-        updateVisualizerUnits();
-    }
 }
 
 // Setup the weather visualizer
@@ -1519,11 +1796,11 @@ async function fetchVisualizerData() {
             tableClone.querySelectorAll('img').forEach(img => img.remove());
             processAndCreateVisualizerCards(tableClone, city.name);
             
-            // Extract current temperature and update map marker
-            const currentTemp = extractCurrentTemperature(tableClone);
-            if (currentTemp !== null) {
-                currentTemperatures[selectedCity] = currentTemp;
-                createOrUpdateMarker(selectedCity, currentTemp);
+            // Extract metrics and update map markers
+            const metrics = extractCityMetrics(tableClone);
+            if (metrics) {
+                currentCityMetrics[selectedCity] = metrics;
+                createOrUpdateMarker(selectedCity);
             }
         } else {
             throw new Error('Weather table not found in the response');
@@ -1652,6 +1929,14 @@ function processAndCreateVisualizerCards(table, cityName) {
             const hue = 0;
             const saturation = Math.min(100, currentValue * 2);
             valueColor = `hsl(${hue}, ${saturation}%, 50%)`;
+        } else if (header.includes('Pressure')) {
+            // Green to blue for pressure
+            const hue = 120 + (currentValue - 98) * 30;
+            valueColor = `hsl(${hue}, 80%, 50%)`;
+        } else if (header.includes('Visibility')) {
+            // Red to green for visibility
+            const hue = currentValue * 4;
+            valueColor = `hsl(${hue}, 80%, 50%)`;
         }
 
         card.innerHTML = `
@@ -1708,6 +1993,9 @@ function openVisualizerModal(header) {
         } else if (header.includes('Visibility')) {
             displayValue = displayValue * 0.621371;
             displayUnit = 'mi';
+        } else if (header.includes('Pressure')) {
+            displayValue = displayValue * 0.2953; // kPa to inHg
+            displayUnit = 'inHg';
         }
     }
     
@@ -1734,6 +2022,9 @@ function openVisualizerModal(header) {
         } else if (header.includes('Visibility')) {
             chartData = chartData.map(v => v * 0.621371);
             chartUnit = 'mi';
+        } else if (header.includes('Pressure')) {
+            chartData = chartData.map(v => v * 0.2953);
+            chartUnit = 'inHg';
         }
     }
     
@@ -1751,6 +2042,10 @@ function openVisualizerModal(header) {
         lineColor = '#36A2EB'; // Blue for wind
     } else if (header.includes('Humidity')) {
         lineColor = '#9966FF'; // Purple for humidity
+    } else if (header.includes('Pressure')) {
+        lineColor = '#FF9F40'; // Orange for pressure
+    } else if (header.includes('Visibility')) {
+        lineColor = '#4BC0C0'; // Teal for visibility
     }
     
     visualizerModalChart = new Chart(ctx, {
@@ -1796,11 +2091,15 @@ function openVisualizerModal(header) {
                             yMin: currentUnit === 'metric' ? data.currentValue : 
                                 header.includes('Temperature') ? data.currentValue * 9/5 + 32 :
                                 header.includes('Wind Speed') ? data.currentValue * 0.621371 :
-                                data.currentValue * 0.621371,
+                                header.includes('Visibility') ? data.currentValue * 0.621371 :
+                                header.includes('Pressure') ? data.currentValue * 0.2953 :
+                                data.currentValue,
                             yMax: currentUnit === 'metric' ? data.currentValue : 
                                 header.includes('Temperature') ? data.currentValue * 9/5 + 32 :
                                 header.includes('Wind Speed') ? data.currentValue * 0.621371 :
-                                data.currentValue * 0.621371,
+                                header.includes('Visibility') ? data.currentValue * 0.621371 :
+                                header.includes('Pressure') ? data.currentValue * 0.2953 :
+                                data.currentValue,
                             borderColor: 'rgb(255, 99, 132)',
                             borderWidth: 2,
                             borderDash: [6, 6],
@@ -1855,112 +2154,6 @@ function updateCurrentDate() {
     const date = new Date();
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById('currentDate').textContent = date.toLocaleDateString('en-CA', options);
-}
-
-// Update units in visualizer
-function updateVisualizerUnits() {
-    const grid = document.getElementById('visualizerGrid');
-    if (!grid) return;
-    
-    const cards = grid.querySelectorAll('.visual-card');
-    cards.forEach(card => {
-        const header = card.getAttribute('data-header');
-        const data = visualizerChartData[header];
-        if (!data) return;
-        
-        // Update current value display
-        const currentValueEl = card.querySelector('.current-value');
-        const unitEl = card.querySelector('.unit');
-        
-        if (header.includes('Temperature')) {
-            const temp = parseFloat(currentValueEl.textContent);
-            if (currentUnit === 'metric') {
-                currentValueEl.textContent = temp.toFixed(1);
-                unitEl.textContent = '°C';
-            } else {
-                currentValueEl.textContent = (temp * 9/5 + 32).toFixed(1);
-                unitEl.textContent = '°F';
-            }
-        } else if (header.includes('Wind Speed')) {
-            const speed = parseFloat(currentValueEl.textContent);
-            if (currentUnit === 'metric') {
-                currentValueEl.textContent = speed.toFixed(1);
-                unitEl.textContent = 'km/h';
-            } else {
-                currentValueEl.textContent = (speed * 0.621371).toFixed(1);
-                unitEl.textContent = 'mph';
-            }
-        } else if (header.includes('Visibility')) {
-            const vis = parseFloat(currentValueEl.textContent);
-            if (currentUnit === 'metric') {
-                currentValueEl.textContent = vis.toFixed(1);
-                unitEl.textContent = 'km';
-            } else {
-                currentValueEl.textContent = (vis * 0.621371).toFixed(1);
-                unitEl.textContent = 'mi';
-            }
-        }
-    });
-    
-    // Update modal if open
-    if (document.getElementById('visualizerModal').style.display === 'flex' && visualizerModalChart) {
-        const modalTitle = document.getElementById('visualizerModalTitle').textContent;
-        const header = modalTitle.split(' (')[0];
-        const data = visualizerChartData[header];
-        
-        if (data) {
-            // Update title and current value
-            document.getElementById('visualizerModalTitle').textContent = 
-                `${header} (${data.city}) at ${data.currentHour}`;
-                
-            let currentValue = data.currentValue;
-            let unit = data.unit;
-            
-            if (header.includes('Temperature')) {
-                if (currentUnit === 'imperial') {
-                    currentValue = currentValue * 9/5 + 32;
-                    unit = '°F';
-                }
-            } else if (header.includes('Wind Speed')) {
-                if (currentUnit === 'imperial') {
-                    currentValue = currentValue * 0.621371;
-                    unit = 'mph';
-                }
-            } else if (header.includes('Visibility')) {
-                if (currentUnit === 'imperial') {
-                    currentValue = currentValue * 0.621371;
-                    unit = 'mi';
-                }
-            }
-            
-            document.getElementById('visualizerModalCurrentValue').textContent = 
-                `${currentValue.toFixed(1)} ${unit}`;
-            
-            // Update chart data and axes
-            if (header.includes('Temperature') || header.includes('Wind Speed') || header.includes('Visibility')) {
-                const chartData = [...data.values];
-                if (currentUnit === 'imperial') {
-                    if (header.includes('Temperature')) {
-                        chartData.forEach((val, i) => {
-                            chartData[i] = val * 9/5 + 32;
-                        });
-                    } else if (header.includes('Wind Speed') || header.includes('Visibility')) {
-                        const factor = header.includes('Wind Speed') ? 0.621371 : 0.621371;
-                        chartData.forEach((val, i) => {
-                            chartData[i] = val * factor;
-                        });
-                    }
-                }
-                
-                visualizerModalChart.data.datasets[0].data = chartData;
-                visualizerModalChart.options.scales.y.title.text = 
-                    currentUnit === 'metric' ? data.unit : 
-                    header.includes('Temperature') ? '°F' : 
-                    header.includes('Wind Speed') ? 'mph' : 'mi';
-                visualizerModalChart.update();
-            }
-        }
-    }
 }
 
 // Load weather forecast data for event planner
