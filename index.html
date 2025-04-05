@@ -1540,7 +1540,7 @@ function extractCityMetrics(table) {
     // Extract all metrics
     const metrics = {
         temperature: extractValue('Temperature') || getFallbackTemperature(city.lat),
-        windSpeed: extractValue('Wind Speed') || getRandomInRange(5, 20),
+        windSpeed: extractValue('Wind') || getRandomInRange(5, 20),
         humidity: extractValue('Humidity') || getRandomInRange(30, 80),
         pressure: extractValue('Pressure') || getRandomInRange(98, 102),
         visibility: extractValue('Visibility') || getRandomInRange(5, 20)
