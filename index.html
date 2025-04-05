@@ -1541,7 +1541,7 @@ function extractCityMetrics(table) {
     const metrics = {
         temperature: extractValue('Temperature') || getFallbackTemperature(city.lat),
         windSpeed: extractValue('Wind') || getRandomInRange(5, 20),
-        humidity: extractValue('Relative humidity') || getRandomInRange(30, 80),
+        humidity: extractValue('Relativehumidity') || getRandomInRange(30, 80),
         pressure: extractValue('Pressure') || getRandomInRange(98, 102),
         visibility: extractValue('Visibility') || getRandomInRange(5, 20)
     };
