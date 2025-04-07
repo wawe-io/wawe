@@ -145,39 +145,35 @@ body {
     z-index: 1000;
 }
 
-/* Temperature classes */
-.metric-point.temp-freezing { background-color: #0000ff; } /* -20°C and below */
-.metric-point.temp-very-cold { background-color: #0066ff; } /* -10°C to -19°C */
-.metric-point.temp-cold { background-color: #00ccff; } /* 0°C to -9°C */
-.metric-point.temp-cool { background-color: #00ffcc; } /* 1°C to 10°C */
-.metric-point.temp-mild { background-color: #ffff00; } /* 11°C to 20°C */
-.metric-point.temp-warm { background-color: #ff9900; } /* 21°C to 30°C */
-.metric-point.temp-hot { background-color: #ff0000; } /* 31°C and above */
+/* Temperature classes - Updated to 3-color scale */
+.metric-point.temp-negative { background-color: #3498db; } /* Blue for negative temps */
+.metric-point.temp-zero { background-color: #b6bcb9; } /* Green for near zero */
+.metric-point.temp-positive { background-color: #e74c3c; } /* Red for positive temps */
 
-/* Wind speed classes */
-.metric-point.wind-calm { background-color: #4CAF50; } /* 0-10 km/h */
-.metric-point.wind-light { background-color: #8BC34A; } /* 11-20 km/h */
-.metric-point.wind-moderate { background-color: #FFC107; } /* 21-30 km/h */
-.metric-point.wind-strong { background-color: #FF9800; } /* 31-50 km/h */
-.metric-point.wind-gale { background-color: #FF5722; } /* 51-70 km/h */
-.metric-point.wind-storm { background-color: #F44336; } /* 71+ km/h */
+/* Wind speed classes - Updated to linear dark to light blue */
+.metric-point.wind-calm { background-color: #1a5276; }
+.metric-point.wind-light { background-color: #2874a6; }
+.metric-point.wind-moderate { background-color: #3498db; }
+.metric-point.wind-strong { background-color: #5dade2; }
+.metric-point.wind-gale { background-color: #85c1e9; }
+.metric-point.wind-storm { background-color: #aed6f1; }
 
-/* Humidity classes */
-.metric-point.humid-dry { background-color: #FF9800; } /* 0-30% */
-.metric-point.humid-comfortable { background-color: #4CAF50; } /* 31-60% */
-.metric-point.humid-humid { background-color: #2196F3; } /* 61-80% */
-.metric-point.humid-very-humid { background-color: #3F51B5; } /* 81-100% */
+/* Humidity classes - Updated to linear dark to light green */
+.metric-point.humid-dry { background-color: #1d8348; }
+.metric-point.humid-comfortable { background-color: #28b463; }
+.metric-point.humid-humid { background-color: #58d68d; }
+.metric-point.humid-very-humid { background-color: #abebc6; }
 
-/* Pressure classes */
-.metric-point.pressure-low { background-color: #F44336; } /* < 98 kPa */
-.metric-point.pressure-normal { background-color: #4CAF50; } /* 98-102 kPa */
-.metric-point.pressure-high { background-color: #2196F3; } /* > 102 kPa */
+/* Pressure classes - Updated to linear dark to light purple */
+.metric-point.pressure-low { background-color: #6c3483; }
+.metric-point.pressure-normal { background-color: #8e44ad; }
+.metric-point.pressure-high { background-color: #bb8fce; }
 
-/* Visibility classes */
-.metric-point.visibility-poor { background-color: #F44336; } /* < 1 km */
-.metric-point.visibility-moderate { background-color: #FFC107; } /* 1-5 km */
-.metric-point.visibility-good { background-color: #4CAF50; } /* 5-10 km */
-.metric-point.visibility-excellent { background-color: #2196F3; } /* > 10 km */
+/* Visibility classes - Updated to linear dark to light orange */
+.metric-point.visibility-poor { background-color: #b9770e; }
+.metric-point.visibility-moderate { background-color: #d68910; }
+.metric-point.visibility-good { background-color: #f39c12; }
+.metric-point.visibility-excellent { background-color: #f8c471; }
 
 /* Metric legend */
 .metric-legend {
@@ -401,7 +397,6 @@ body {
 .current-value {
     font-size: 18px;
     font-weight: 700;
-    color: #333;
     margin: 5px 0;
     text-shadow: none;
 }
@@ -903,34 +898,39 @@ body {
         <!-- Legend will be updated dynamically -->
         <div class="metric-legend" id="metricLegend">
             <div class="metric-legend-title" id="metricLegendTitle">Temperature (°C)</div>
-            <div class="metric-legend-scale" id="metricLegendScale" style="background: linear-gradient(to right, #0000ff, #0066ff, #00ccff, #00ffcc, #ffff00, #ff9900, #ff0000);"></div>
+            <div class="metric-legend-scale" id="metricLegendScale" style="background: linear-gradient(to right, #3498db, #b6bcb9, #e74c3c);"></div>
             <div class="metric-legend-labels" id="metricLegendLabels">
                 <div class="metric-legend-label">-20°</div>
-                <div class="metric-legend-label">-10°</div>
                 <div class="metric-legend-label">0°</div>
-                <div class="metric-legend-label">10°</div>
                 <div class="metric-legend-label">20°</div>
-                <div class="metric-legend-label">30°</div>
-                <div class="metric-legend-label">40°</div>
             </div>
         </div>
     </div>
     <div id="visualizer-container">
         <div class="visualizer-city-switcher">
             <select id="visualizerCitySelect">
+                <option value="ybr">Brandon (YBR)</option>
+                <option value="yqg">Bridgewater (YQG)</option>
+                <option value="yyc">Calgary (YYC)</option>
+                <option value="yyg">Charlottetown (YYG)</option>
+                <option value="yeg">Edmonton (YEG)</option>
                 <option value="yfc">Fredericton (YFC)</option>
                 <option value="yhz">Halifax (YHZ)</option>
-                <option value="yyt">St. John's (YYT)</option>
-                <option value="yyg">Charlottetown (YYG)</option>
-                <option value="yqb">Quebec City (YQB)</option>
+                <option value="ywk">Labrador City (Wabush) (YWK)</option>
+                <option value="yxu">London (YXU)</option>
+                <option value="yul">Montreal (YUL)</option>
                 <option value="yow">Ottawa (YOW)</option>
-                <option value="yyz">Toronto (YYZ)</option>
+                <option value="yqb">Quebec City (YQB)</option>
                 <option value="yqr" selected>Regina (YQR)</option>
-                <option value="ywg">Winnipeg (YWG)</option>
-                <option value="yeg">Edmonton (YEG)</option>
-                <option value="yxy">Whitehorse (YXY)</option>
-                <option value="yzf">Yellowknife (YZF)</option>
+                <option value="ysj">Saint John (YSJ)</option>
+                <option value="yxe">Saskatoon (YXE)</option>
+                <option value="wsd">Summerside (YRY)</option>
+                <option value="yyz">Toronto (YYZ)</option>
+                <option value="yvr">Vancouver (YVR)</option>
                 <option value="yyj">Victoria (YYJ)</option>
+                <option value="yxy">Whitehorse (YXY)</option>
+                <option value="ywg">Winnipeg (YWG)</option>
+                <option value="yzf">Yellowknife (YZF)</option>
             </select>
             <button id="visualizerFetchBtn">Update</button>
         </div>
@@ -979,8 +979,10 @@ body {
 
 <div class="modal" id="visualizerModal">
     <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2 class="modal-title" id="visualizerModalTitle">Metric Name</h2>
+        <div class="modal-header">
+            <h2 class="modal-title" id="visualizerModalTitle">Metric Name</h2>
+            <span class="close-modal">&times;</span>
+        </div>
         <div class="modal-current-value" id="visualizerModalCurrentValue">--</div>
         <div class="modal-chart-container">
             <canvas id="visualizerModalChart"></canvas>
@@ -1042,6 +1044,46 @@ const tileLayers = {
 
 // City data for visualizer with coordinates (capital cities of all provinces)
 const cityData = {
+    ybr: {
+        name: "Brandon",
+        province: "Manitoba",
+        station: "ybr",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=ybr",
+        lat: 49.91,
+        lng: -99.95
+    },
+    yyc: {
+        name: "Calgary",
+        province: "Alberta",
+        station: "yyc",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyc",
+        lat: 51.1139,
+        lng: -114.0203
+    },
+    yqg: {
+        name: "Bridgewater",
+        province: "Nova Scotia",
+        station: "yqg",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yqg",
+        lat: 44.37,
+        lng: -64.52
+    },
+    yyg: {
+        name: "Charlottetown",
+        province: "Prince Edward Island",
+        station: "yyg",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyg",
+        lat: 46.2382,
+        lng: -63.1311
+    },
+    yeg: {
+        name: "Edmonton",
+        province: "Alberta",
+        station: "yeg",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yeg",
+        lat: 53.5461,
+        lng: -113.4938
+    },
     yfc: {
         name: "Fredericton",
         province: "New Brunswick",
@@ -1058,29 +1100,29 @@ const cityData = {
         lat: 44.6488,
         lng: -63.5752
     },
-    yyt: {
-        name: "St. John's",
+    ywk: {
+        name: "Labrador City",
         province: "Newfoundland and Labrador",
-        station: "yyt",
-        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyt",
-        lat: 47.5615,
-        lng: -52.7126
+        station: "ywk",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=ywk",
+        lat: 52.92,
+        lng: -66.86
     },
-    yyg: {
-        name: "Charlottetown",
-        province: "Prince Edward Island",
-        station: "yyg",
-        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyg",
-        lat: 46.2382,
-        lng: -63.1311
+    yxu: {
+        name: "London",
+        province: "Ontario",
+        station: "yxu",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yxu",
+        lat: 43.0333,
+        lng: -81.15
     },
-    yqb: {
-        name: "Quebec City",
+    yul: {
+        name: "Montreal",
         province: "Quebec",
-        station: "yqb",
-        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yqb",
-        lat: 46.8139,
-        lng: -71.2080
+        station: "yul",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yul",
+        lat: 45.4706,
+        lng: -73.7408
     },
     yow: {
         name: "Ottawa",
@@ -1090,13 +1132,13 @@ const cityData = {
         lat: 45.3225,
         lng: -75.6692
     },
-    yyz: {
-        name: "Toronto",
-        province: "Ontario",
-        station: "yyz",
-        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyz",
-        lat: 43.6777,
-        lng: -79.6248
+    yqb: {
+        name: "Quebec City",
+        province: "Quebec",
+        station: "yqb",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yqb",
+        lat: 46.8139,
+        lng: -71.2080
     },
     yqr: {
         name: "Regina",
@@ -1106,21 +1148,53 @@ const cityData = {
         lat: 50.4322,
         lng: -104.666
     },
-    ywg: {
-        name: "Winnipeg",
-        province: "Manitoba",
-        station: "ywg",
-        url: "https://weather.gc.ca/past_conditions/index_e.html?station=ywg",
-        lat: 49.8951,
-        lng: -97.1384
+    ysj: {
+        name: "Saint John",
+        province: "New Brunswick",
+        station: "ysj",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=ysj",
+        lat: 45.3163,
+        lng: -65.8903
     },
-    yeg: {
-        name: "Edmonton",
-        province: "Alberta",
-        station: "yeg",
-        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yeg",
-        lat: 53.5461,
-        lng: -113.4938
+    yxe: {
+        name: "Saskatoon",
+        province: "Saskatchewan",
+        station: "yxe",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yxe",
+        lat: 52.1707,
+        lng: -106.6997
+    },
+    wsd: {
+        name: "Summerside",
+        province: "Prince Edward Island",
+        station: "wsd",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=wsd",
+        lat: 46.4406,
+        lng: -63.8336
+    },
+    yyz: {
+        name: "Toronto",
+        province: "Ontario",
+        station: "yyz",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyz",
+        lat: 43.6777,
+        lng: -79.6248
+    },
+    yvr: {
+        name: "Vancouver",
+        province: "British Columbia",
+        station: "yvr",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yvr",
+        lat: 49.1947,
+        lng: -123.1794
+    },
+    yyj: {
+        name: "Victoria",
+        province: "British Columbia",
+        station: "yyj",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyj",
+        lat: 48.4284,
+        lng: -123.3656
     },
     yxy: {
         name: "Whitehorse",
@@ -1130,6 +1204,14 @@ const cityData = {
         lat: 60.7212,
         lng: -135.0568
     },
+    ywg: {
+        name: "Winnipeg",
+        province: "Manitoba",
+        station: "ywg",
+        url: "https://weather.gc.ca/past_conditions/index_e.html?station=ywg",
+        lat: 49.8951,
+        lng: -97.1384
+    },
     yzf: {
         name: "Yellowknife",
         province: "Northwest Territories",
@@ -1137,14 +1219,6 @@ const cityData = {
         url: "https://weather.gc.ca/past_conditions/index_e.html?station=yzf",
         lat: 62.4530,
         lng: -114.3718
-    },
-    yyj: {
-        name: "Victoria",
-        province: "British Columbia",
-        station: "yyj",
-        url: "https://weather.gc.ca/past_conditions/index_e.html?station=yyj",
-        lat: 48.4284,
-        lng: -123.3656
     }
 };
 
@@ -1217,6 +1291,7 @@ async function init() {
             document.getElementById('metricBtn').classList.add('active');
             document.getElementById('imperialBtn').classList.remove('active');
             updateMapMarkers();
+            updateVisualizerCards();
         }
     });
     
@@ -1226,6 +1301,7 @@ async function init() {
             document.getElementById('imperialBtn').classList.add('active');
             document.getElementById('metricBtn').classList.remove('active');
             updateMapMarkers();
+            updateVisualizerCards();
         }
     });
     
@@ -1329,34 +1405,26 @@ function updateLegend() {
     switch(currentMetric) {
         case 'temperature':
             legendTitle.textContent = `Temperature (${currentUnit === 'metric' ? '°C' : '°F'})`;
-            legendScale.style.background = 'linear-gradient(to right, #0000ff, #0066ff, #00ccff, #00ffcc, #ffff00, #ff9900, #ff0000)';
+            legendScale.style.background = 'linear-gradient(to right, #3498db, #b6bcb9, #e74c3c)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
                     <div class="metric-legend-label">-20°</div>
-                    <div class="metric-legend-label">-10°</div>
                     <div class="metric-legend-label">0°</div>
-                    <div class="metric-legend-label">10°</div>
                     <div class="metric-legend-label">20°</div>
-                    <div class="metric-legend-label">30°</div>
-                    <div class="metric-legend-label">40°</div>
                 `;
             } else {
                 legendLabels.innerHTML = `
                     <div class="metric-legend-label">-4°</div>
-                    <div class="metric-legend-label">14°</div>
                     <div class="metric-legend-label">32°</div>
-                    <div class="metric-legend-label">50°</div>
                     <div class="metric-legend-label">68°</div>
-                    <div class="metric-legend-label">86°</div>
-                    <div class="metric-legend-label">104°</div>
                 `;
             }
             break;
             
         case 'wind':
             legendTitle.textContent = `Wind Speed (${currentUnit === 'metric' ? 'km/h' : 'mph'})`;
-            legendScale.style.background = 'linear-gradient(to right, #4CAF50, #8BC34A, #FFC107, #FF9800, #FF5722, #F44336)';
+            legendScale.style.background = 'linear-gradient(to right, #1a5276, #2874a6, #3498db, #5dade2, #85c1e9, #aed6f1)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
@@ -1366,7 +1434,6 @@ function updateLegend() {
                     <div class="metric-legend-label">30</div>
                     <div class="metric-legend-label">50</div>
                     <div class="metric-legend-label">70</div>
-                    <div class="metric-legend-label">100+</div>
                 `;
             } else {
                 legendLabels.innerHTML = `
@@ -1376,75 +1443,57 @@ function updateLegend() {
                     <div class="metric-legend-label">19</div>
                     <div class="metric-legend-label">31</div>
                     <div class="metric-legend-label">43</div>
-                    <div class="metric-legend-label">62+</div>
                 `;
             }
             break;
             
         case 'humidity':
             legendTitle.textContent = 'Humidity (%)';
-            legendScale.style.background = 'linear-gradient(to right, #FF9800, #FFC107, #8BC34A, #4CAF50, #2196F3, #3F51B5)';
+            legendScale.style.background = 'linear-gradient(to right, #1d8348, #28b463, #58d68d, #abebc6)';
             legendLabels.innerHTML = `
                 <div class="metric-legend-label">0</div>
-                <div class="metric-legend-label">20</div>
-                <div class="metric-legend-label">40</div>
+                <div class="metric-legend-label">30</div>
                 <div class="metric-legend-label">60</div>
-                <div class="metric-legend-label">80</div>
                 <div class="metric-legend-label">90</div>
-                <div class="metric-legend-label">100</div>
             `;
             break;
             
         case 'pressure':
             legendTitle.textContent = `Pressure (${currentUnit === 'metric' ? 'kPa' : 'inHg'})`;
-            legendScale.style.background = 'linear-gradient(to right, #F44336, #FF9800, #FFC107, #8BC34A, #4CAF50, #2196F3)';
+            legendScale.style.background = 'linear-gradient(to right, #6c3483, #8e44ad, #bb8fce)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
                     <div class="metric-legend-label">96</div>
-                    <div class="metric-legend-label">98</div>
                     <div class="metric-legend-label">100</div>
-                    <div class="metric-legend-label">102</div>
                     <div class="metric-legend-label">104</div>
-                    <div class="metric-legend-label">106</div>
-                    <div class="metric-legend-label">108</div>
                 `;
             } else {
                 legendLabels.innerHTML = `
                     <div class="metric-legend-label">28.3</div>
-                    <div class="metric-legend-label">28.9</div>
                     <div class="metric-legend-label">29.5</div>
-                    <div class="metric-legend-label">30.1</div>
                     <div class="metric-legend-label">30.7</div>
-                    <div class="metric-legend-label">31.3</div>
-                    <div class="metric-legend-label">31.9</div>
                 `;
             }
             break;
             
         case 'visibility':
             legendTitle.textContent = `Visibility (${currentUnit === 'metric' ? 'km' : 'mi'})`;
-            legendScale.style.background = 'linear-gradient(to right, #F44336, #FFC107, #8BC34A, #4CAF50, #2196F3)';
+            legendScale.style.background = 'linear-gradient(to right, #b9770e, #d68910, #f39c12, #f8c471)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
                     <div class="metric-legend-label">0</div>
-                    <div class="metric-legend-label">2</div>
                     <div class="metric-legend-label">5</div>
                     <div class="metric-legend-label">10</div>
                     <div class="metric-legend-label">20</div>
-                    <div class="metric-legend-label">30</div>
-                    <div class="metric-legend-label">40+</div>
                 `;
             } else {
                 legendLabels.innerHTML = `
                     <div class="metric-legend-label">0</div>
-                    <div class="metric-legend-label">1.2</div>
                     <div class="metric-legend-label">3.1</div>
                     <div class="metric-legend-label">6.2</div>
                     <div class="metric-legend-label">12.4</div>
-                    <div class="metric-legend-label">18.6</div>
-                    <div class="metric-legend-label">25+</div>
                 `;
             }
             break;
@@ -1540,8 +1589,8 @@ function extractCityMetrics(table) {
     // Extract all metrics
     const metrics = {
         temperature: extractValue('Temperature') || getFallbackTemperature(city.lat),
-        windSpeed: extractValue('Wind') || getRandomInRange(5, 20),
-        humidity: extractValue('Relativehumidity') || getRandomInRange(30, 80),
+        windSpeed: extractValue('Wind Speed') || getRandomInRange(5, 20),
+        humidity: extractValue('Humidity') || getRandomInRange(30, 80),
         pressure: extractValue('Pressure') || getRandomInRange(98, 102),
         visibility: extractValue('Visibility') || getRandomInRange(5, 20)
     };
@@ -1615,13 +1664,9 @@ function createOrUpdateMarker(cityKey) {
             value = metrics.temperature;
             displayValue = currentUnit === 'metric' ? value : (value * 9/5 + 32);
             
-            if (value <= -20) metricClass = 'temp-freezing';
-            else if (value <= -10) metricClass = 'temp-very-cold';
-            else if (value <= 0) metricClass = 'temp-cold';
-            else if (value <= 10) metricClass = 'temp-cool';
-            else if (value <= 20) metricClass = 'temp-mild';
-            else if (value <= 30) metricClass = 'temp-warm';
-            else metricClass = 'temp-hot';
+            if (value <= 0) metricClass = 'temp-negative';
+            else if (value <= 10) metricClass = 'temp-zero';
+            else metricClass = 'temp-positive';
             break;
             
         case 'wind':
@@ -1731,11 +1776,7 @@ function setupVisualizer() {
     });
     
     // Modal close buttons
-    document.querySelectorAll('.close-modal').forEach(btn => {
-        if (btn.parentElement.id === 'visualizerModal') {
-            btn.addEventListener('click', closeVisualizerModal);
-        }
-    });
+    document.querySelector('.close-modal').addEventListener('click', closeVisualizerModal);
     
     // Close modal when clicking outside
     window.addEventListener('click', (event) => {
@@ -1815,6 +1856,75 @@ async function fetchVisualizerData() {
     }
 }
 
+// Update visualizer cards when unit changes
+function updateVisualizerCards() {
+    const cards = document.querySelectorAll('.visual-card');
+    cards.forEach(card => {
+        const header = card.getAttribute('data-header');
+        const data = visualizerChartData[header];
+        if (!data) return;
+        
+        let displayValue = data.currentValue;
+        let displayUnit = data.unit;
+        
+        if (currentUnit === 'imperial') {
+            if (header.includes('Temperature')) {
+                displayValue = displayValue * 9/5 + 32;
+                displayUnit = '°F';
+            } else if (header.includes('Wind Speed')) {
+                displayValue = displayValue * 0.621371;
+                displayUnit = 'mph';
+            } else if (header.includes('Visibility')) {
+                displayValue = displayValue * 0.621371;
+                displayUnit = 'mi';
+            } else if (header.includes('Pressure')) {
+                displayValue = displayValue * 0.2953; // kPa to inHg
+                displayUnit = 'inHg';
+            }
+        }
+        
+        // Apply color based on value (for temperature)
+        let valueColor = '#2c3e50'; // Default text color
+        if (header.includes('Temperature')) {
+            valueColor = getTempColor(data.currentValue);
+        } else if (header.includes('Humidity')) {
+            // Dark green to light green for humidity
+            const hue = 120 - (data.currentValue * 0.6); // 120 is green in HSL
+            const lightness = 20 + (data.currentValue * 0.6);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
+        } else if (header.includes('Wind Speed')) {
+            // Dark blue to light blue for wind speed
+            const hue = 240;
+            const lightness = 20 + (data.currentValue * 0.8);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
+        } else if (header.includes('Pressure')) {
+            // Dark purple to light purple for pressure
+            const hue = 280;
+            const lightness = 20 + (data.currentValue * 0.8);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
+        } else if (header.includes('Visibility')) {
+            // Dark orange to light orange for visibility
+            const hue = 30;
+            const lightness = 20 + (data.currentValue * 2);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
+        }
+        
+        const metricName = header.replace(/\([^)]+\)/, '').trim();
+        
+        card.innerHTML = `
+            <div class="visual-card-header">
+                <h3 title="${metricName}">${metricName}</h3>
+                <div class="current-value" style="color: ${valueColor}">${displayValue.toFixed(1)}</div>
+                <div class="unit">${displayUnit}</div>
+            </div>
+        `;
+        
+        card.addEventListener('click', () => {
+            openVisualizerModal(header);
+        });
+    });
+}
+
 // Process table data and create visual cards for the visualizer
 function processAndCreateVisualizerCards(table, cityName) {
     const headers = Array.from(table.querySelectorAll('thead th')).map(th => {
@@ -1833,7 +1943,7 @@ function processAndCreateVisualizerCards(table, cityName) {
         } else if (text.includes('Pressure') && text.includes('kPa')) {
             text = 'Pressure (kPa)';
         } else if (text.includes('Pressure') && text.includes('in')) {
-            text = 'Pressure (in)';
+            text = 'Pressure (inHg)';
         } else if (text.includes('Visibility') && text.includes('km')) {
             text = 'Visibility (km)';
         } else if (text.includes('Visibility') && text.includes('mi')) {
@@ -1913,7 +2023,25 @@ function processAndCreateVisualizerCards(table, cityName) {
         card.setAttribute('data-header', header);
         
         const unitMatch = header.match(/\(([^)]+)\)/);
-        const unit = unitMatch ? unitMatch[1] : '';
+        let displayUnit = unitMatch ? unitMatch[1] : '';
+        let displayValue = currentValue;
+        
+        if (currentUnit === 'imperial') {
+            if (header.includes('Temperature')) {
+                displayValue = displayValue * 9/5 + 32;
+                displayUnit = '°F';
+            } else if (header.includes('Wind Speed')) {
+                displayValue = displayValue * 0.621371;
+                displayUnit = 'mph';
+            } else if (header.includes('Visibility')) {
+                displayValue = displayValue * 0.621371;
+                displayUnit = 'mi';
+            } else if (header.includes('Pressure')) {
+                displayValue = displayValue * 0.2953;
+                displayUnit = 'inHg';
+            }
+        }
+        
         const metricName = header.replace(/\([^)]+\)/, '').trim();
 
         // Apply color based on value (for temperature)
@@ -1921,29 +2049,32 @@ function processAndCreateVisualizerCards(table, cityName) {
         if (header.includes('Temperature')) {
             valueColor = getTempColor(currentValue);
         } else if (header.includes('Humidity')) {
-            // Blue gradient for humidity
-            const hue = 240 - (currentValue * 2.4);
-            valueColor = `hsl(${hue}, 80%, 50%)`;
+            // Dark green to light green for humidity
+            const hue = 120 - (currentValue * 0.6); // 120 is green in HSL
+            const lightness = 20 + (currentValue * 0.6);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
         } else if (header.includes('Wind Speed')) {
-            // Red gradient for wind speed
-            const hue = 0;
-            const saturation = Math.min(100, currentValue * 2);
-            valueColor = `hsl(${hue}, ${saturation}%, 50%)`;
+            // Dark blue to light blue for wind speed
+            const hue = 240;
+            const lightness = 20 + (currentValue * 0.8);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
         } else if (header.includes('Pressure')) {
-            // Green to blue for pressure
-            const hue = 120 + (currentValue - 98) * 30;
-            valueColor = `hsl(${hue}, 80%, 50%)`;
+            // Dark purple to light purple for pressure
+            const hue = 280;
+            const lightness = 20 + (currentValue * 0.8);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
         } else if (header.includes('Visibility')) {
-            // Red to green for visibility
-            const hue = currentValue * 4;
-            valueColor = `hsl(${hue}, 80%, 50%)`;
+            // Dark orange to light orange for visibility
+            const hue = 30;
+            const lightness = 20 + (currentValue * 2);
+            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
         }
 
         card.innerHTML = `
             <div class="visual-card-header">
                 <h3 title="${metricName}">${metricName}</h3>
-                <div class="current-value" style="color: ${valueColor}">${currentValue.toFixed(1)}</div>
-                <div class="unit">${unit}</div>
+                <div class="current-value" style="color: ${valueColor}">${displayValue.toFixed(1)}</div>
+                <div class="unit">${displayUnit}</div>
             </div>
         `;
 
@@ -1963,13 +2094,9 @@ function processAndCreateVisualizerCards(table, cityName) {
 
 // Get color for temperature value
 function getTempColor(temp) {
-    if (temp <= -20) return '#0000ff';
-    if (temp <= -10) return '#0066ff';
-    if (temp <= 0) return '#00ccff';
-    if (temp <= 10) return '#00ffcc';
-    if (temp <= 20) return '#ffff00';
-    if (temp <= 30) return '#ff9900';
-    return '#ff0000';
+    if (temp <= 0) return '#3498db'; // Blue for negative/zero
+    if (temp <= 10) return '#b6bcb9'; // Green for near zero
+    return '#e74c3c'; // Red for positive
 }
 
 // Open modal with expanded chart view
@@ -1978,7 +2105,7 @@ function openVisualizerModal(header) {
     if (!data) return;
 
     // Update modal content
-    document.getElementById('visualizerModalTitle').textContent = `${header} (${data.city}) at ${data.currentHour}`;
+    document.getElementById('visualizerModalTitle').textContent = `${header}  -  ${data.city} at ${data.currentHour} till next hour`;
     
     let displayValue = data.currentValue;
     let displayUnit = data.unit;
@@ -2008,8 +2135,13 @@ function openVisualizerModal(header) {
         visualizerModalChart.destroy();
     }
     
-    // Prepare chart data
-    let chartData = [...data.values];
+    // Prepare chart data - reverse both labels and values to plot left to right
+    let chartData = [...data.values].reverse();
+    let chartLabels = [...data.labels].reverse();
+    if (chartLabels.length > 0) {
+        chartLabels.shift(); // Remove first label
+        chartLabels.push(""); // Add empty string to maintain length
+    }
     let chartUnit = data.unit;
     
     if (currentUnit === 'imperial') {
@@ -2028,41 +2160,37 @@ function openVisualizerModal(header) {
         }
     }
     
+    // Find the index where the day changes (midnight)
+    const midnightIndex = chartLabels.findIndex(label => label === '00:00');
+    
     // Highlight current hour in the chart
-    const currentIndex = data.labels.indexOf(data.currentHour);
-    const pointBackgroundColors = data.labels.map((label, index) => 
-        index === currentIndex ? '#ff6384' : '#4CAF50'
+    const currentIndex = chartLabels.indexOf(data.currentHour);
+    const backgroundColors = chartLabels.map((labels, index) => 
+        index === currentIndex ? 'rgba(255, 99, 132, 0.7)' : 'rgba(54, 162, 235, 0.7)'
     );
     
-    // Set line color based on metric type
-    let lineColor = '#4CAF50'; // Default green
+    // Set bar color based on metric type
+    let barColor = 'rgba(54, 162, 235, 0.7)'; // Default blue
     if (header.includes('Temperature')) {
-        lineColor = '#FF6384'; // Reddish for temperature
-    } else if (header.includes('Wind Speed')) {
-        lineColor = '#36A2EB'; // Blue for wind
+        barColor = 'rgba(255, 99, 132, 0.7)'; // Red for temperature
     } else if (header.includes('Humidity')) {
-        lineColor = '#9966FF'; // Purple for humidity
+        barColor = 'rgba(75, 192, 192, 0.7)'; // Green for humidity
     } else if (header.includes('Pressure')) {
-        lineColor = '#FF9F40'; // Orange for pressure
+        barColor = 'rgba(153, 102, 255, 0.7)'; // Purple for pressure
     } else if (header.includes('Visibility')) {
-        lineColor = '#4BC0C0'; // Teal for visibility
+        barColor = 'rgba(255, 159, 64, 0.7)'; // Orange for visibility
     }
     
     visualizerModalChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: data.labels,
+            labels: chartLabels,
             datasets: [{
                 label: data.metricName,
                 data: chartData,
-                borderColor: lineColor,
-                backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                pointBackgroundColor: pointBackgroundColors,
-                pointRadius: data.labels.map((label, index) => 
-                    index === currentIndex ? 6 : 3
-                ),
-                tension: 0.1,
-                fill: true
+                backgroundColor: backgroundColors,
+                borderColor: backgroundColors.map(color => color.replace('0.7', '1')),
+                borderWidth: 1
             }]
         },
         options: {
@@ -2108,6 +2236,19 @@ function openVisualizerModal(header) {
                                 enabled: true,
                                 position: 'left'
                             }
+                        },
+                        // Add vertical line at midnight to separate days
+                        midnightLine: {
+                            type: 'line',
+                            xMin: midnightIndex !== -1 ? midnightIndex : 0,
+                            xMax: midnightIndex !== -1 ? midnightIndex : 0,
+                            borderColor: 'rgb(0, 0, 0)',
+                            borderWidth: 2,
+                            label: {
+                                content: midnightIndex !== -1 ? '' : '',
+                                enabled: true,
+                                position: 'top'
+                            }
                         }
                     }
                 }
@@ -2122,13 +2263,11 @@ function openVisualizerModal(header) {
                 },
                 x: {
                     title: { display: true, text: 'Time' },
+                    offset: true,
                     ticks: {
                         callback: function(value) {
                             // Highlight current hour in x-axis labels
-                            if (this.getLabelForValue(value) === data.currentHour) {
-                                return '→ ' + this.getLabelForValue(value) + ' ←';
-                            }
-                            return this.getLabelForValue(value);
+                                                        return this.getLabelForValue(value);
                         }
                     }
                 }
@@ -2167,19 +2306,28 @@ async function loadWeatherForecast() {
     
     // Determine the RSS feed based on the city
     switch(selectedCity) {
-        case 'yfc': rssUrl = 'https://weather.gc.ca/rss/city/nb-24_e.xml'; break; // Fredericton
+        case 'yfc': rssUrl = 'https://weather.gc.ca/rss/city/nb-29_e.xml'; break; // Fredericton
         case 'yhz': rssUrl = 'https://weather.gc.ca/rss/city/ns-19_e.xml'; break; // Halifax
-        case 'yyt': rssUrl = 'https://weather.gc.ca/rss/city/nl-3_e.xml'; break; // St. John's
-        case 'yyg': rssUrl = 'https://weather.gc.ca/rss/city/pe-1_e.xml'; break; // Charlottetown
-        case 'yqb': rssUrl = 'https://weather.gc.ca/rss/city/qc-133_e.xml'; break; // Quebec City
+        case 'yeg': rssUrl = 'https://weather.gc.ca/rss/city/ab-50_e.xml'; break; // Edmonton
+        case 'yyc': rssUrl = 'https://weather.gc.ca/rss/city/ab-52_e.xml'; break; // Calgary
+        case 'yvr': rssUrl = 'https://weather.gc.ca/rss/city/bc-74_e.xml'; break; // Vancouver
+        case 'yyj': rssUrl = 'https://weather.gc.ca/rss/city/bc-85_e.xml'; break; // Victoria
+        case 'ybr': rssUrl = 'https://weather.gc.ca/rss/city/mb-52_e.xml'; break; // Brandon
+        case 'ywg': rssUrl = 'https://weather.gc.ca/rss/city/mb-38_e.xml'; break; // Winnipeg
+        case 'ysj': rssUrl = 'https://weather.gc.ca/rss/city/nb-23_e.xml'; break; // Saint John
+        case 'ywk': rssUrl = 'https://weather.gc.ca/rss/city/nl-20_e.xml'; break; // Labrador City
+        case 'yqg': rssUrl = 'https://weather.gc.ca/rss/city/ns-6_e.xml'; break; // Bridgewater
+        case 'yzf': rssUrl = 'https://weather.gc.ca/rss/city/nt-24_e.xml'; break; // Yellowknife
+        case 'yxu': rssUrl = 'https://weather.gc.ca/rss/city/on-137_e.xml'; break; // London
         case 'yow': rssUrl = 'https://weather.gc.ca/rss/city/on-118_e.xml'; break; // Ottawa
         case 'yyz': rssUrl = 'https://weather.gc.ca/rss/city/on-143_e.xml'; break; // Toronto
+        case 'wsd': rssUrl = 'https://weather.gc.ca/rss/city/pe-3_e.xml'; break; // Summerside
+        case 'yyg': rssUrl = 'https://weather.gc.ca/rss/city/pe-5_e.xml'; break; // Charlottetown
+        case 'yqb': rssUrl = 'https://weather.gc.ca/rss/city/qc-133_e.xml'; break; // Quebec City
+        case 'yul': rssUrl = 'https://weather.gc.ca/rss/city/qc-147_e.xml'; break; // Montreal
+        case 'yxe': rssUrl = 'https://weather.gc.ca/rss/city/sk-40_e.xml'; break; // Saskatoon
         case 'yqr': rssUrl = 'https://weather.gc.ca/rss/city/sk-32_e.xml'; break; // Regina
-        case 'ywg': rssUrl = 'https://weather.gc.ca/rss/city/mb-38_e.xml'; break; // Winnipeg
-        case 'yeg': rssUrl = 'https://weather.gc.ca/rss/city/ab-50_e.xml'; break; // Edmonton
         case 'yxy': rssUrl = 'https://weather.gc.ca/rss/city/yt-16_e.xml'; break; // Whitehorse
-        case 'yzf': rssUrl = 'https://weather.gc.ca/rss/city/nt-25_e.xml'; break; // Yellowknife
-        case 'yyj': rssUrl = 'https://weather.gc.ca/rss/city/bc-85_e.xml'; break; // Victoria
     }
     
     const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(rssUrl);
