@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --primary: #4361ee;
+    --primary: #81D8D0;
     --secondary: #3f37c9;
     --success: #4cc9f0;
     --danger: #f72585;
@@ -41,13 +41,35 @@ body {
     background-color: #f5f7fa;
 }
 
-#map-container {
+#left-panel {
     grid-column: 1;
     grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--primary);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+
+.left-panel-header {
+    color: black;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+#map-container {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    flex: 1;
+    min-height: 300px;
+    background-color: white;
 }
 
 #map {
@@ -56,19 +78,19 @@ body {
 }
 
 #visualizer-container {
-    grid-column: 2;
-    grid-row: 1;
-    display: flex;
-    flex-direction: column;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,.1);
     overflow: hidden;
+    flex: 1;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
 }
 
 #right-panel {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1 / span 2;
     display: flex;
     flex-direction: column;
     background: #fff;
@@ -103,7 +125,7 @@ body {
     font-weight: 500;
     margin-bottom: 5px;
     display: block;
-    color: var(--text);
+    color: black;
 }
 
 .map-layer-select, .province-select {
@@ -244,7 +266,7 @@ body {
 }
 
 .metric-btn.active {
-    color: var(--primary);
+    color: black;
     font-weight: 500;
 }
 
@@ -355,7 +377,7 @@ body {
 
 .visuals-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 12px;
 }
 
@@ -390,7 +412,7 @@ body {
 .visual-card-header h3 {
     margin: 0 0 5px 0;
     font-size: 13px;
-    color: var(--text);
+    color: #000; /* Changed to black */
     font-weight: 500;
 }
 
@@ -399,11 +421,18 @@ body {
     font-weight: 700;
     margin: 5px 0;
     text-shadow: none;
+    color: #000; /* Changed to black */
 }
 
 .unit {
     font-size: 11px;
-    color: var(--muted);
+    color: #000; /* Changed to black */
+}
+
+.sparkline-container {
+    width: 100%; 
+    height: 40px;
+    margin-top: 5px;
 }
 
 .no-visuals {
@@ -792,6 +821,203 @@ body {
     border-top: 1px solid #eee;
 }
 
+/* Metrics Summary Popup */
+.metrics-summary-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 3000;
+    max-width: 400px;
+    width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.metrics-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.metrics-summary-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0;
+}
+
+.metrics-summary-close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.metrics-summary-close:hover {
+    color: var(--danger);
+}
+
+.metrics-summary-content {
+    margin-bottom: 15px;
+}
+
+.metrics-summary-row {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.metrics-summary-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+    margin-right: 15px;
+    color: var(--primary);
+}
+
+.metrics-summary-details {
+    flex: 1;
+}
+
+.metrics-summary-label {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+
+.metrics-summary-value {
+    font-size: 1rem;
+    color: #333;
+}
+
+.metrics-summary-footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Compare Modal */
+.compare-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.7);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.compare-modal-content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.compare-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.compare-modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.close-compare-modal {
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.close-compare-modal:hover {
+    color: var(--danger);
+}
+
+.compare-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.compare-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.compare-metric-select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-family: inherit;
+}
+
+.compare-chart-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+}
+
+.compare-chart {
+    width: 100%;
+    height: 100%;
+}
+
+.compare-city-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.compare-city-checkbox {
+    display: none;
+}
+
+.compare-city-label {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #f0f2f5;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.compare-city-checkbox:checked + .compare-city-label {
+    background: var(--primary);
+    color: white;
+}
+
+.compare-city-label:hover {
+    background: #e0e2e5;
+}
+
+.compare-city-checkbox:checked + .compare-city-label:hover {
+    background: var(--secondary);
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translate(-50%, -55%); }
     to { opacity: 1; transform: translate(-50%, -50%); }
@@ -828,6 +1054,40 @@ body {
     margin-top: 15px;
 }
 
+/* Compare button */
+.compare-btn-container {
+    position: absolute;
+    bottom: 170px;
+    right: 20px;
+    z-index: 2000;
+    background: rgba(255,255,255,0.9);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    backdrop-filter: blur(5px);
+}
+
+.compare-btn {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--muted);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.compare-btn:hover {
+    color: var(--primary);
+}
+
+.compare-btn i {
+    font-size: 14px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
     #container {
@@ -835,25 +1095,408 @@ body {
         grid-template-rows: auto auto auto;
     }
     
-    #map-container {
+    #left-panel {
         grid-column: 1;
         grid-row: 1;
-        height: 400px;
-    }
-    
-    #visualizer-container {
-        grid-column: 1;
-        grid-row: 2;
     }
     
     #right-panel {
         grid-column: 1;
+        grid-row: 2;
+    }
+    
+    #visualizer-container {
+        grid-column: 1;
         grid-row: 3;
     }
+}
+
+/* Fullscreen map modal */
+.fullscreen-map-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.9);
+    z-index: 3000;
+}
+
+.fullscreen-map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.fullscreen-map {
+    width: 100%;
+    height: 100%;
+}
+
+.fullscreen-map-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 3001;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--muted);
+    transition: all 0.2s;
+}
+
+.fullscreen-map-close:hover {
+    color: var(--danger);
+    transform: scale(1.1);
+}
+
+.fullscreen-map-controls {
+    position: absolute;
+    top: 20px;
+    right: 70px;
+    z-index: 3001;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(255,255,255,0.9);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    width: 220px;
+    backdrop-filter: blur(5px);
+}
+
+.fullscreen-map-controls-group {
+    margin-bottom: 10px;
+}
+
+.fullscreen-map-controls-label {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+    color: var(--text);
+}
+
+.fullscreen-map-layer-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fullscreen-map-layer-select:focus {
+    outline: 0;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+}
+
+.fullscreen-metric-switcher {
+    position: absolute;
+    bottom: 120px;
+    right: 20px;
+    z-index: 3001;
+    background: rgba(255,255,255,0.9);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+}
+
+.fullscreen-compare-btn-container {
+    position: absolute;
+    bottom: 170px;
+    right: 20px;
+    z-index: 3001;
+    background: rgba(255,255,255,0.9);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    backdrop-filter: blur(5px);
+}
+
+.fullscreen-metric-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 3001;
+    background: rgba(255,255,255,0.9);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+}
+
+.expand-map-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--muted);
+    transition: all 0.2s;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+}
+
+.expand-map-btn:hover {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+/* Heat Map Styles */
+.activity-heatmap {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    position: relative;
+}
+
+.heatmap-header {
+    background: linear-gradient(135deg, #4361ee 0, #3f37c9 100%);
+    color: white;
+    padding: 10px 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.heatmap-container {
+    background: white;
+    padding: 15px;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.heatmap-cell {
+    width: 95%;
+    height: 100%;
+    border-radius: 4px;
+}
+
+/* Heatmap Legend */
+.heatmap-legend {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.9);
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+}
+
+.heatmap-legend-title {
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #2b2d42;
+}
+
+.heatmap-legend-scale {
+    display: flex;
+    height: 15px;
+    width: 150px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 3px;
+    background: linear-gradient(to right, #ff0000, #ffff00, #00ff00);
+}
+
+.heatmap-legend-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.heatmap-legend-label {
+    font-size: 9px;
+    color: #2b2d42;
+}
+
+/* Heatmap Chart Styles */
+.heatmap-chart-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.heatmap-chart {
+    display: flex;
+    height: 300px;
+    margin-bottom: 10px;
+}
+
+.heatmap-chart-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 120px;
+    padding-right: 10px;
+    text-align: right;
+}
+
+.heatmap-chart-y-label {
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px;
+}
+
+.heatmap-chart-y-label i {
+    margin-right: 8px;
+}
+
+.heatmap-chart-content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.heatmap-chart-x-axis {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-left: 120px;
+    padding-top: 5px;
+}
+
+.heatmap-chart-x-label {
+    font-size: 12px;
+    text-align: center;
+}
+.info-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.info-button:hover {
+    background-color: var(--secondary);
+    transform: scale(1.1);
+}
+
+.info-panel {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    padding: 15px;
+    z-index: 1000;
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.info-panel h3 {
+    margin-top: 0;
+    color: var(--primary);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.info-panel ul {
+    padding-left: 20px;
+}
+
+.info-panel li {
+    margin-bottom: 8px;
+}
+
+.info-panel a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.info-panel a:hover {
+    text-decoration: underline;
+}
+
+.info-panel .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: var(--muted);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 <body>
+    <!-- Information button -->
+<div class="info-button" id="infoButton">
+    <i class="fas fa-info"></i>
+</div>
+
+<!-- Information panel -->
+<div class="info-panel" id="infoPanel">
+    <span class="close-btn" id="closeInfoPanel">&times;</span>
+    <h3>Data Sources & Information</h3>
+    <p>This dashboard uses weather data from:</p>
+    <ul>
+        <li><a href="https://geo.weather.gc.ca/" target="_blank">GeoMet Weather API</a></li>
+        <li><a href="https://weather.gc.ca/" target="_blank">Environment Canada</a></li>
+    </ul>
+    
+    <h4>Outdoor Activities & Weather</h4>
+    <ul>
+        <li><a href="https://www.weather.gov/safety" target="_blank">Weather Safety Guide (NOAA)</a></li>
+        <li><a href="https://www.weather.gov/outdoorrecreation" target="_blank">Outdoor Recreation Weather</a></li>
+        <li><a href="https://www.mountain-forecast.com/weather_maps" target="_blank">Mountain Weather Patterns</a></li>
+    </ul>
+</div>
+
 <!-- Loading overlay that will be shown while fetching initial data -->
 <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-overlay-spinner"></div>
@@ -861,91 +1504,109 @@ body {
 </div>
 
 <div id="container">
-    <div id="map-container">
-        <div id="map"></div>
-        <div class="map-controls">
-            <div class="map-controls-group">
-                <label class="map-controls-label">Map Style</label>
-                <select class="map-layer-select" id="mapLayerSelect">
-                    <option value="osm" selected>OpenStreetMap</option>
-                    <option value="osm-classic">OSM Classic</option>
-                    <option value="osm-humanitarian">OSM Humanitarian</option>
-                    <option value="carto-positron">CartoDB Positron</option>
-                    <option value="carto-dark">CartoDB Dark</option>
-                    <option value="stamen-toner">Stamen Toner</option>
-                    <option value="stamen-terrain">Stamen Terrain</option>
-                    <option value="stamen-watercolor">Stamen Watercolor</option>
-                    <option value="esri-imagery">Esri Imagery</option>
-                    <option value="esri-topo">Esri Topo</option>
-                </select>
+    <div id="left-panel">
+        <div class="left-panel-header">24-Hour City Outlook</div>
+        <div id="map-container">
+            <div id="map"></div>
+            <div class="map-controls">
+                <div class="map-controls-group">
+                    <label class="map-controls-label">Map Style</label>
+                    <select class="map-layer-select" id="mapLayerSelect">
+                        <option value="osm" selected>OpenStreetMap</option>
+                        <option value="osm-classic">OSM Classic</option>
+                        <option value="osm-humanitarian">OSM Humanitarian</option>
+                        <option value="carto-positron">CartoDB Positron</option>
+                        <option value="carto-dark">CartoDB Dark</option>
+                        <option value="stamen-toner">Stamen Toner</option>
+                        <option value="stamen-terrain">Stamen Terrain</option>
+                        <option value="stamen-watercolor">Stamen Watercolor</option>
+                        <option value="esri-imagery">Esri Imagery</option>
+                        <option value="esri-topo">Esri Topo</option>
+                    </select>
+                </div>
+                <div class="map-controls-group">
+                    <label class="map-controls-label">Units</label>
+                    <div class="unit-switcher">
+                        <button class="unit-btn active" id="metricBtn">Metric unit Scale</button>
+                        <button class="unit-btn" id="imperialBtn">Imperial Unit Scale</button>
+                    </div>
+                </div>
             </div>
-            <div class="map-controls-group">
-                <label class="map-controls-label">Units</label>
-                <div class="unit-switcher">
-                    <button class="unit-btn active" id="metricBtn">Metric (°C, km/h)</button>
-                    <button class="unit-btn" id="imperialBtn">Imperial (°F, mph)</button>
+            
+            <!-- Metric switcher -->
+            <div class="metric-switcher">
+                <button class="metric-btn" id="prevMetricBtn"><i class="fas fa-chevron-left"></i></button>
+                <button class="metric-btn active" id="currentMetricBtn">Temperature</button>
+                <button class="metric-btn" id="nextMetricBtn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <!-- Compare button -->
+            <div class="compare-btn-container">
+                <button class="compare-btn" id="compareBtn">
+                    <i class="fas fa-chart-bar"></i> Compare Cities
+                </button>
+            </div>
+            
+            <!-- Expand map button -->
+            <button class="expand-map-btn" id="expandMapBtn">
+                <i class="fas fa-expand"></i>
+            </button>
+            
+            <!-- Legend will be updated dynamically -->
+            <div class="metric-legend" id="metricLegend">
+                <div class="metric-legend-title" id="metricLegendTitle">Temperature (°C)</div>
+                <div class="metric-legend-scale" id="metricLegendScale" style="background: linear-gradient(to right, #3498db, #b6bcb9, #e74c3c);"></div>
+                <div class="metric-legend-labels" id="metricLegendLabels">
+                    <div class="metric-legend-label">-20°</div>
+                    <div class="metric-legend-label">0°</div>
+                    <div class="metric-legend-label">20°</div>
                 </div>
             </div>
         </div>
         
-        <!-- Metric switcher -->
-        <div class="metric-switcher">
-            <button class="metric-btn" id="prevMetricBtn"><i class="fas fa-chevron-left"></i></button>
-            <button class="metric-btn active" id="currentMetricBtn">Temperature</button>
-            <button class="metric-btn" id="nextMetricBtn"><i class="fas fa-chevron-right"></i></button>
-        </div>
-        
-        <!-- Legend will be updated dynamically -->
-        <div class="metric-legend" id="metricLegend">
-            <div class="metric-legend-title" id="metricLegendTitle">Temperature (°C)</div>
-            <div class="metric-legend-scale" id="metricLegendScale" style="background: linear-gradient(to right, #3498db, #b6bcb9, #e74c3c);"></div>
-            <div class="metric-legend-labels" id="metricLegendLabels">
-                <div class="metric-legend-label">-20°</div>
-                <div class="metric-legend-label">0°</div>
-                <div class="metric-legend-label">20°</div>
+        <div id="visualizer-container">
+            <div class="visualizer-city-switcher">
+                <select id="visualizerCitySelect">
+                    <option value="ybr">Brandon (YBR)</option>
+                    <option value="yqg">Bridgewater (YQG)</option>
+                    <option value="yyc">Calgary (YYC)</option>
+                    <option value="yyg">Charlottetown (YYG)</option>
+                    <option value="yeg">Edmonton (YEG)</option>
+                    <option value="yfc">Fredericton (YFC)</option>
+                    <option value="yhz">Halifax (YHZ)</option>
+                    <option value="ywk">Labrador City (Wabush) (YWK)</option>
+                    <option value="yxu">London (YXU)</option>
+                    <option value="yul">Montreal (YUL)</option>
+                    <option value="yow">Ottawa (YOW)</option>
+                    <option value="yqb">Quebec City (YQB)</option>
+                    <option value="yqr" selected>Regina (YQR)</option>
+                    <option value="ysj">Saint John (YSJ)</option>
+                    <option value="yxe">Saskatoon (YXE)</option>
+                    <option value="wsd">Summerside (YRY)</option>
+                    <option value="yyz">Toronto (YYZ)</option>
+                    <option value="yvr">Vancouver (YVR)</option>
+                    <option value="yyj">Victoria (YYJ)</option>
+                    <option value="yxy">Whitehorse (YXY)</option>
+                    <option value="ywg">Winnipeg (YWG)</option>
+                    <option value="yzf">Yellowknife (YZF)</option>
+                </select>
+                <button id="visualizerFetchBtn">Update</button>
+            </div>
+            <div id="visualizerLoading" class="visualizer-loading">
+                <div class="loading-spinner"></div>
+                <p>Loading weather data...</p>
+            </div>
+            <div id="visualizerError" class="visualizer-error"></div>
+            <div id="visualizerVisuals" class="visualizer-visuals">
+                <div id="visualizerGrid" class="visuals-grid"></div>
             </div>
         </div>
     </div>
-    <div id="visualizer-container">
-        <div class="visualizer-city-switcher">
-            <select id="visualizerCitySelect">
-                <option value="ybr">Brandon (YBR)</option>
-                <option value="yqg">Bridgewater (YQG)</option>
-                <option value="yyc">Calgary (YYC)</option>
-                <option value="yyg">Charlottetown (YYG)</option>
-                <option value="yeg">Edmonton (YEG)</option>
-                <option value="yfc">Fredericton (YFC)</option>
-                <option value="yhz">Halifax (YHZ)</option>
-                <option value="ywk">Labrador City (Wabush) (YWK)</option>
-                <option value="yxu">London (YXU)</option>
-                <option value="yul">Montreal (YUL)</option>
-                <option value="yow">Ottawa (YOW)</option>
-                <option value="yqb">Quebec City (YQB)</option>
-                <option value="yqr" selected>Regina (YQR)</option>
-                <option value="ysj">Saint John (YSJ)</option>
-                <option value="yxe">Saskatoon (YXE)</option>
-                <option value="wsd">Summerside (YRY)</option>
-                <option value="yyz">Toronto (YYZ)</option>
-                <option value="yvr">Vancouver (YVR)</option>
-                <option value="yyj">Victoria (YYJ)</option>
-                <option value="yxy">Whitehorse (YXY)</option>
-                <option value="ywg">Winnipeg (YWG)</option>
-                <option value="yzf">Yellowknife (YZF)</option>
-            </select>
-            <button id="visualizerFetchBtn">Update</button>
-        </div>
-        <div id="visualizerLoading" class="visualizer-loading">
-            <div class="loading-spinner"></div>
-            <p>Loading weather data...</p>
-        </div>
-        <div id="visualizerError" class="visualizer-error"></div>
-        <div id="visualizerVisuals" class="visualizer-visuals">
-            <div id="visualizerGrid" class="visuals-grid"></div>
-        </div>
-    </div>
+    
     <div id="right-panel">
         <div id="controls-container">
             <div class="current-date" id="currentDate"></div>
+            
             <div class="glass-card">
                 <div class="event-planner-header">
                     <div class="event-planner-title">Weather Event Planner</div>
@@ -972,6 +1633,90 @@ body {
                 <div class="event-planner-footer">
                     <p>Powered by Environment Canada Weather Data</p>
                 </div>
+            </div>
+        </div>
+        <!-- Outdoor Activity Heatmap -->
+<div class="glass-card" style="margin-top: 20px;">
+    <div class="activity-heatmap" id="activityHeatmap">
+        <div class="heatmap-header">
+            <i class="fas fa-fire"></i> Outdoor Activity Recommendations
+        </div>
+        <div class="heatmap-container">
+            <div class="heatmap-chart-container">
+                <div class="heatmap-chart">
+                    <div class="heatmap-chart-y-axis" id="heatmapYAxis"></div>
+                    <div class="heatmap-chart-content" id="heatmapContent"></div>
+                </div>
+                <div class="heatmap-chart-x-axis" id="heatmapXAxis"></div>
+            </div>
+            <div class="heatmap-legend">
+                <div class="heatmap-legend-title">Activity Suitability</div>
+                <div class="heatmap-legend-scale"></div>
+                <div class="heatmap-legend-labels">
+                    <div class="heatmap-legend-label">Poor</div>
+                    <div class="heatmap-legend-label">Fair</div>
+                    <div class="heatmap-legend-label">Good</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+<!-- Fullscreen Map Modal -->
+<div class="fullscreen-map-modal" id="fullscreenMapModal">
+    <div class="fullscreen-map-container">
+        <div id="fullscreenMap" class="fullscreen-map"></div>
+        <button class="fullscreen-map-close" id="fullscreenMapClose">&times;</button>
+        
+        <div class="fullscreen-map-controls">
+            <div class="fullscreen-map-controls-group">
+                <label class="fullscreen-map-controls-label">Map Style</label>
+                <select class="fullscreen-map-layer-select" id="fullscreenMapLayerSelect">
+                    <option value="osm" selected>OpenStreetMap</option>
+                    <option value="osm-classic">OSM Classic</option>
+                    <option value="osm-humanitarian">OSM Humanitarian</option>
+                    <option value="carto-positron">CartoDB Positron</option>
+                    <option value="carto-dark">CartoDB Dark</option>
+                    <option value="stamen-toner">Stamen Toner</option>
+                    <option value="stamen-terrain">Stamen Terrain</option>
+                    <option value="stamen-watercolor">Stamen Watercolor</option>
+                    <option value="esri-imagery">Esri Imagery</option>
+                    <option value="esri-topo">Esri Topo</option>
+                </select>
+            </div>
+            <div class="fullscreen-map-controls-group">
+                <label class="fullscreen-map-controls-label">Units</label>
+                <div class="unit-switcher">
+                    <button class="unit-btn active" id="fullscreenMetricBtn">Metric unit Scale</button>
+                    <button class="unit-btn" id="fullscreenImperialBtn">Imperial Unit Scale</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Metric switcher -->
+        <div class="fullscreen-metric-switcher">
+            <button class="metric-btn" id="fullscreenPrevMetricBtn"><i class="fas fa-chevron-left"></i></button>
+            <button class="metric-btn active" id="fullscreenCurrentMetricBtn">Temperature</button>
+            <button class="metric-btn" id="fullscreenNextMetricBtn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        
+        <!-- Compare button -->
+        <div class="fullscreen-compare-btn-container">
+            <button class="compare-btn" id="fullscreenCompareBtn">
+                <i class="fas fa-chart-bar"></i> Compare Cities
+            </button>
+        </div>
+        
+        <!-- Legend will be updated dynamically -->
+        <div class="fullscreen-metric-legend" id="fullscreenMetricLegend">
+            <div class="metric-legend-title" id="fullscreenMetricLegendTitle">Temperature (°C)</div>
+            <div class="metric-legend-scale" id="fullscreenMetricLegendScale" style="background: linear-gradient(to right, #3498db, #b6bcb9, #e74c3c);"></div>
+            <div class="metric-legend-labels" id="fullscreenMetricLegendLabels">
+                <div class="metric-legend-label">-20°</div>
+                <div class="metric-legend-label">0°</div>
+                <div class="metric-legend-label">20°</div>
             </div>
         </div>
     </div>
@@ -1001,6 +1746,53 @@ body {
     </div>
     <div class="weather-popup-footer">
         Powered by Environment Canada Weather Data
+    </div>
+</div>
+
+<!-- Metrics Summary Popup -->
+<div class="metrics-summary-popup" id="metricsSummaryPopup" style="display: none;">
+    <div class="metrics-summary-header">
+        <h3 class="metrics-summary-title" id="metricsSummaryTitle">Current Weather Metrics</h3>
+        <span class="metrics-summary-close" id="metricsSummaryClose">&times;</span>
+    </div>
+    <div class="metrics-summary-content" id="metricsSummaryContent">
+        <!-- Content will be inserted here dynamically -->
+    </div>
+    <div class="metrics-summary-footer">
+        Powered by Environment Canada Weather Data
+    </div>
+</div>
+
+<!-- Compare Modal -->
+<div class="compare-modal" id="compareModal">
+    <div class="compare-modal-content">
+        <div class="compare-modal-header">
+            <h2 class="compare-modal-title">Compare Cities</h2>
+            <span class="close-compare-modal">&times;</span>
+        </div>
+        <div class="compare-modal-body">
+            <div class="compare-controls">
+                <select class="compare-metric-select" id="compareMetricSelect">
+                    <option value="temperature">Temperature (°C)</option>
+                    <option value="wind">Wind Speed (km/h)</option>
+                    <option value="humidity">Humidity (%)</option>
+                    <option value="pressure">Pressure (kPa)</option>
+                    <option value="visibility">Visibility (km)</option>
+                </select>
+                <button class="submit-btn" id="updateCompareBtn">
+                    <i class="fas fa-sync-alt"></i> Update Comparison
+                </button>
+            </div>
+            <div class="compare-chart-container">
+                <canvas id="compareChart"></canvas>
+            </div>
+            <div>
+                <h3>Select Cities to Compare</h3>
+                <div class="compare-city-list" id="compareCityList">
+                    <!-- Cities will be added here dynamically -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -1230,7 +2022,9 @@ const windDirections = [
 
 // Global variables
 let map;
+let fullscreenMap;
 let tempMarkers = {};
+let fullscreenTempMarkers = {};
 let visualizerModalChart;
 let selectedDay = null;
 let weatherForecastData = [];
@@ -1252,6 +2046,8 @@ let metricUnits = {
     pressure: { metric: 'kPa', imperial: 'inHg' },
     visibility: { metric: 'km', imperial: 'mi' }
 };
+let compareChart = null;
+let selectedCitiesForComparison = ['yqr', 'yyz', 'yvr']; // Default cities to compare
 
 // Initialize the application
 async function init() {
@@ -1284,14 +2080,20 @@ async function init() {
         `;
     }
     
-    // Unit switcher
+    // Setup expand map button
+    document.getElementById('expandMapBtn').addEventListener('click', openFullscreenMap);
+    document.getElementById('fullscreenMapClose').addEventListener('click', closeFullscreenMap);
+    
+    // Unit switcher - only affects map and legend
     document.getElementById('metricBtn').addEventListener('click', () => {
         if (currentUnit !== 'metric') {
             currentUnit = 'metric';
             document.getElementById('metricBtn').classList.add('active');
             document.getElementById('imperialBtn').classList.remove('active');
+            document.getElementById('fullscreenMetricBtn').classList.add('active');
+            document.getElementById('fullscreenImperialBtn').classList.remove('active');
             updateMapMarkers();
-            updateVisualizerCards();
+            updateLegend();
         }
     });
     
@@ -1300,8 +2102,35 @@ async function init() {
             currentUnit = 'imperial';
             document.getElementById('imperialBtn').classList.add('active');
             document.getElementById('metricBtn').classList.remove('active');
+            document.getElementById('fullscreenImperialBtn').classList.add('active');
+            document.getElementById('fullscreenMetricBtn').classList.remove('active');
             updateMapMarkers();
-            updateVisualizerCards();
+            updateLegend();
+        }
+    });
+    
+    // Fullscreen map unit switcher
+    document.getElementById('fullscreenMetricBtn').addEventListener('click', () => {
+        if (currentUnit !== 'metric') {
+            currentUnit = 'metric';
+            document.getElementById('metricBtn').classList.add('active');
+            document.getElementById('imperialBtn').classList.remove('active');
+            document.getElementById('fullscreenMetricBtn').classList.add('active');
+            document.getElementById('fullscreenImperialBtn').classList.remove('active');
+            updateMapMarkers();
+            updateLegend();
+        }
+    });
+    
+    document.getElementById('fullscreenImperialBtn').addEventListener('click', () => {
+        if (currentUnit !== 'imperial') {
+            currentUnit = 'imperial';
+            document.getElementById('imperialBtn').classList.add('active');
+            document.getElementById('metricBtn').classList.remove('active');
+            document.getElementById('fullscreenImperialBtn').classList.add('active');
+            document.getElementById('fullscreenMetricBtn').classList.remove('active');
+            updateMapMarkers();
+            updateLegend();
         }
     });
     
@@ -1314,6 +2143,21 @@ async function init() {
     });
     
     document.getElementById('nextMetricBtn').addEventListener('click', () => {
+        const metrics = Object.keys(metricNames);
+        const currentIndex = metrics.indexOf(currentMetric);
+        const newIndex = (currentIndex + 1) % metrics.length;
+        setCurrentMetric(metrics[newIndex]);
+    });
+    
+    // Fullscreen map metric switcher
+    document.getElementById('fullscreenPrevMetricBtn').addEventListener('click', () => {
+        const metrics = Object.keys(metricNames);
+        const currentIndex = metrics.indexOf(currentMetric);
+        const newIndex = (currentIndex - 1 + metrics.length) % metrics.length;
+        setCurrentMetric(metrics[newIndex]);
+    });
+    
+    document.getElementById('fullscreenNextMetricBtn').addEventListener('click', () => {
         const metrics = Object.keys(metricNames);
         const currentIndex = metrics.indexOf(currentMetric);
         const newIndex = (currentIndex + 1) % metrics.length;
@@ -1386,12 +2230,345 @@ This plan was generated by Weather Event Planner using live data from Environmen
     document.getElementById('weatherPopupClose').addEventListener('click', () => {
         document.getElementById('weatherPopup').style.display = 'none';
     });
+    
+    // Setup metrics summary popup close button
+    document.getElementById('metricsSummaryClose').addEventListener('click', () => {
+        document.getElementById('metricsSummaryPopup').style.display = 'none';
+    });
+    
+    // Setup compare modal
+    document.getElementById('compareBtn').addEventListener('click', openCompareModal);
+    document.getElementById('fullscreenCompareBtn').addEventListener('click', openCompareModal);
+    document.querySelector('.close-compare-modal').addEventListener('click', closeCompareModal);
+    document.getElementById('updateCompareBtn').addEventListener('click', updateCompareChart);
+    
+    // Initialize city checkboxes for comparison
+    initCityCheckboxes();
+}
+
+// Open fullscreen map
+function openFullscreenMap() {
+    document.getElementById('fullscreenMapModal').style.display = 'block';
+    
+    // Initialize fullscreen map if not already initialized
+    if (!fullscreenMap) {
+        fullscreenMap = L.map('fullscreenMap', {
+            minZoom: 2,
+            maxZoom: 18
+        }).setView(map.getCenter(), map.getZoom());
+        
+        tileLayers.osm.addTo(fullscreenMap);
+        
+        document.getElementById('fullscreenMapLayerSelect').addEventListener('change', function() {
+            const layerKey = this.value;
+            Object.values(tileLayers).forEach(layer => fullscreenMap.removeLayer(layer));
+            tileLayers[layerKey].addTo(fullscreenMap);
+        });
+        
+        // Plot all city points on the fullscreen map
+        Object.keys(cityData).forEach(cityKey => {
+            createOrUpdateFullscreenMarker(cityKey);
+        });
+    } else {
+        // Update view to match main map
+        fullscreenMap.setView(map.getCenter(), map.getZoom());
+    }
+    
+    // Sync map layer with main map
+    const currentLayer = document.getElementById('mapLayerSelect').value;
+    document.getElementById('fullscreenMapLayerSelect').value = currentLayer;
+}
+
+// Close fullscreen map
+function closeFullscreenMap() {
+    document.getElementById('fullscreenMapModal').style.display = 'none';
+}
+
+// Create or update a city marker on the fullscreen map
+function createOrUpdateFullscreenMarker(cityKey) {
+    const city = cityData[cityKey];
+    const metrics = currentCityMetrics[cityKey];
+    
+    if (!metrics) return;
+    
+    // Determine value and class based on current metric
+    let value, metricClass, displayValue;
+    
+    switch(currentMetric) {
+        case 'temperature':
+            value = metrics.temperature;
+            displayValue = currentUnit === 'metric' ? value : (value * 9/5 + 32);
+            
+            if (value <= 0) metricClass = 'temp-negative';
+            else if (value <= 10) metricClass = 'temp-zero';
+            else metricClass = 'temp-positive';
+            break;
+            
+        case 'wind':
+            value = metrics.windSpeed;
+            displayValue = currentUnit === 'metric' ? value : (value * 0.621371);
+            
+            if (value <= 10) metricClass = 'wind-calm';
+            else if (value <= 20) metricClass = 'wind-light';
+            else if (value <= 30) metricClass = 'wind-moderate';
+            else if (value <= 50) metricClass = 'wind-strong';
+            else if (value <= 70) metricClass = 'wind-gale';
+            else metricClass = 'wind-storm';
+            break;
+            
+        case 'humidity':
+            value = metrics.humidity;
+            displayValue = value;
+            
+            if (value <= 30) metricClass = 'humid-dry';
+            else if (value <= 60) metricClass = 'humid-comfortable';
+            else if (value <= 80) metricClass = 'humid-humid';
+            else metricClass = 'humid-very-humid';
+            break;
+            
+        case 'pressure':
+            value = metrics.pressure;
+            displayValue = currentUnit === 'metric' ? value : (value * 0.2953); // Convert kPa to inHg
+            
+            if (value < 98) metricClass = 'pressure-low';
+            else if (value <= 102) metricClass = 'pressure-normal';
+            else metricClass = 'pressure-high';
+            break;
+            
+        case 'visibility':
+            value = metrics.visibility;
+            displayValue = currentUnit === 'metric' ? value : (value * 0.621371);
+            
+            if (value < 1) metricClass = 'visibility-poor';
+            else if (value <= 5) metricClass = 'visibility-moderate';
+            else if (value <= 10) metricClass = 'visibility-good';
+            else metricClass = 'visibility-excellent';
+            break;
+    }
+    
+    // Create custom icon
+    const metricIcon = L.divIcon({
+        className: `metric-point ${metricClass}`,
+        html: `<span>${Math.round(displayValue)}</span>`,
+        iconSize: [38, 38]
+    });
+    
+    // Remove existing marker if it exists
+    if (fullscreenTempMarkers[cityKey]) {
+        fullscreenMap.removeLayer(fullscreenTempMarkers[cityKey]);
+    }
+    
+    // Create new marker with custom icon
+    const marker = L.marker([city.lat, city.lng], {
+        icon: metricIcon
+    }).addTo(fullscreenMap);
+    
+    // Add tooltip with city info
+    const unit = metricUnits[currentMetric][currentUnit];
+    marker.bindTooltip(`
+        <b>${city.name}, ${city.province}</b><br>
+        ${metricNames[currentMetric]}: ${displayValue.toFixed(1)}${unit}<br>
+        <small>Click for detailed weather</small>
+    `);
+    
+    // Add click handler
+    marker.on('click', function() {
+        document.getElementById('visualizerCitySelect').value = cityKey;
+        fetchVisualizerData();
+        fullscreenMap.setView([city.lat, city.lng], 10);
+    });
+    
+    // Store marker reference
+    fullscreenTempMarkers[cityKey] = marker;
+}
+
+// Initialize city checkboxes for comparison
+function initCityCheckboxes() {
+    const cityList = document.getElementById('compareCityList');
+    cityList.innerHTML = '';
+    
+    Object.keys(cityData).forEach(cityKey => {
+        const city = cityData[cityKey];
+        const checkboxId = `compare-city-${cityKey}`;
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = checkboxId;
+        checkbox.className = 'compare-city-checkbox';
+        checkbox.value = cityKey;
+        checkbox.checked = selectedCitiesForComparison.includes(cityKey);
+        
+        const label = document.createElement('label');
+        label.htmlFor = checkboxId;
+        label.className = 'compare-city-label';
+        label.textContent = city.name;
+        
+        const container = document.createElement('div');
+        container.appendChild(checkbox);
+        container.appendChild(label);
+        
+        cityList.appendChild(container);
+        
+        // Add event listener to update selected cities
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                if (!selectedCitiesForComparison.includes(cityKey)) {
+                    selectedCitiesForComparison.push(cityKey);
+                }
+            } else {
+                selectedCitiesForComparison = selectedCitiesForComparison.filter(c => c !== cityKey);
+            }
+        });
+    });
+}
+
+// Open the compare modal
+function openCompareModal() {
+    document.getElementById('compareModal').style.display = 'flex';
+    updateCompareChart();
+}
+
+// Close the compare modal
+function closeCompareModal() {
+    document.getElementById('compareModal').style.display = 'none';
+    if (compareChart) {
+        compareChart.destroy();
+        compareChart = null;
+    }
+}
+
+// Update the comparison chart
+function updateCompareChart() {
+    const metric = document.getElementById('compareMetricSelect').value;
+    const ctx = document.getElementById('compareChart').getContext('2d');
+    
+    // Filter selected cities that have data
+    const citiesToCompare = selectedCitiesForComparison.filter(cityKey => 
+        currentCityMetrics[cityKey] && currentCityMetrics[cityKey][getMetricKey(metric)]
+    );
+    
+    if (citiesToCompare.length === 0) {
+        if (compareChart) compareChart.destroy();
+        document.getElementById('compareChart').parentElement.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: var(--muted);">
+                <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <p>No data available for selected cities and metric.</p>
+                <p>Please select different cities or try another metric.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Prepare data for chart
+    const labels = citiesToCompare.map(cityKey => cityData[cityKey].name);
+    const data = citiesToCompare.map(cityKey => {
+        const metrics = currentCityMetrics[cityKey];
+        const value = metrics[getMetricKey(metric)];
+        return currentUnit === 'metric' ? value : convertToImperial(metric, value);
+    });
+    
+    const unit = currentUnit === 'metric' ? 
+        metricUnits[metric].metric : 
+        metricUnits[metric].imperial;
+    
+    // Use a single color for all bars (blue in this case)
+    const barColor = 'rgba(54, 162, 235, 0.7)';
+    const borderColor = 'rgba(54, 162, 235, 1)';
+    
+    if (compareChart) {
+        compareChart.destroy();
+    }
+    
+    compareChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: `${metricNames[metric]} (${unit})`,
+                data: data,
+                backgroundColor: Array(citiesToCompare.length).fill(barColor),
+                borderColor: Array(citiesToCompare.length).fill(borderColor),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: { 
+                    display: true, 
+                    text: `Comparison of ${metricNames[metric]} Across Cities`,
+                    font: { size: 18 }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${metricNames[metric]}: ${context.parsed.y.toFixed(1)} ${unit}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: { 
+                    beginAtZero: metric !== 'temperature', // Don't force zero for temperature
+                    title: { 
+                        display: true, 
+                        text: unit
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Helper function to get metric key from select value
+function getMetricKey(metric) {
+    switch(metric) {
+        case 'temperature': return 'temperature';
+        case 'wind': return 'windSpeed';
+        case 'humidity': return 'humidity';
+        case 'pressure': return 'pressure';
+        case 'visibility': return 'visibility';
+        default: return 'temperature';
+    }
+}
+
+// Helper function to convert metric to imperial
+function convertToImperial(metric, value) {
+    if (!value) return 0;
+    
+    switch(metric) {
+        case 'temperature':
+            return value * 9/5 + 32;
+        case 'wind':
+            return value * 0.621371;
+        case 'pressure':
+            return value * 0.2953;
+        case 'visibility':
+            return value * 0.621371;
+        default:
+            return value;
+    }
+}
+
+// Generate distinct colors for chart
+function generateColors(count) {
+    const colors = [];
+    const hueStep = 360 / count;
+    
+    for (let i = 0; i < count; i++) {
+        const hue = i * hueStep;
+        colors.push(`hsla(${hue}, 70%, 50%, 0.7)`);
+    }
+    
+    return colors;
 }
 
 // Set the current metric and update UI
 function setCurrentMetric(metric) {
     currentMetric = metric;
     document.getElementById('currentMetricBtn').textContent = metricNames[metric];
+    document.getElementById('fullscreenCurrentMetricBtn').textContent = metricNames[metric];
     updateLegend();
     updateMapMarkers();
 }
@@ -1402,13 +2579,24 @@ function updateLegend() {
     const legendScale = document.getElementById('metricLegendScale');
     const legendLabels = document.getElementById('metricLegendLabels');
     
+    const fullscreenLegendTitle = document.getElementById('fullscreenMetricLegendTitle');
+    const fullscreenLegendScale = document.getElementById('fullscreenMetricLegendScale');
+    const fullscreenLegendLabels = document.getElementById('fullscreenMetricLegendLabels');
+    
     switch(currentMetric) {
         case 'temperature':
             legendTitle.textContent = `Temperature (${currentUnit === 'metric' ? '°C' : '°F'})`;
             legendScale.style.background = 'linear-gradient(to right, #3498db, #b6bcb9, #e74c3c)';
+            fullscreenLegendTitle.textContent = `Temperature (${currentUnit === 'metric' ? '°C' : '°F'})`;
+            fullscreenLegendScale.style.background = 'linear-gradient(to right, #3498db, #b6bcb9, #e74c3c)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
+                    <div class="metric-legend-label">-20°</div>
+                    <div class="metric-legend-label">0°</div>
+                    <div class="metric-legend-label">20°</div>
+                `;
+                fullscreenLegendLabels.innerHTML = `
                     <div class="metric-legend-label">-20°</div>
                     <div class="metric-legend-label">0°</div>
                     <div class="metric-legend-label">20°</div>
@@ -1419,15 +2607,30 @@ function updateLegend() {
                     <div class="metric-legend-label">32°</div>
                     <div class="metric-legend-label">68°</div>
                 `;
+                fullscreenLegendLabels.innerHTML = `
+                    <div class="metric-legend-label">-4°</div>
+                    <div class="metric-legend-label">32°</div>
+                    <div class="metric-legend-label">68°</div>
+                `;
             }
             break;
             
         case 'wind':
             legendTitle.textContent = `Wind Speed (${currentUnit === 'metric' ? 'km/h' : 'mph'})`;
             legendScale.style.background = 'linear-gradient(to right, #1a5276, #2874a6, #3498db, #5dade2, #85c1e9, #aed6f1)';
+            fullscreenLegendTitle.textContent = `Wind Speed (${currentUnit === 'metric' ? 'km/h' : 'mph'})`;
+            fullscreenLegendScale.style.background = 'linear-gradient(to right, #1a5276, #2874a6, #3498db, #5dade2, #85c1e9, #aed6f1)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">10</div>
+                    <div class="metric-legend-label">20</div>
+                    <div class="metric-legend-label">30</div>
+                    <div class="metric-legend-label">50</div>
+                    <div class="metric-legend-label">70</div>
+                `;
+                fullscreenLegendLabels.innerHTML = `
                     <div class="metric-legend-label">0</div>
                     <div class="metric-legend-label">10</div>
                     <div class="metric-legend-label">20</div>
@@ -1444,13 +2647,29 @@ function updateLegend() {
                     <div class="metric-legend-label">31</div>
                     <div class="metric-legend-label">43</div>
                 `;
+                fullscreenLegendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">6</div>
+                    <div class="metric-legend-label">12</div>
+                    <div class="metric-legend-label">19</div>
+                    <div class="metric-legend-label">31</div>
+                    <div class="metric-legend-label">43</div>
+                `;
             }
             break;
             
         case 'humidity':
             legendTitle.textContent = 'Humidity (%)';
             legendScale.style.background = 'linear-gradient(to right, #1d8348, #28b463, #58d68d, #abebc6)';
+            fullscreenLegendTitle.textContent = 'Humidity (%)';
+            fullscreenLegendScale.style.background = 'linear-gradient(to right, #1d8348, #28b463, #58d68d, #abebc6)';
             legendLabels.innerHTML = `
+                <div class="metric-legend-label">0</div>
+                <div class="metric-legend-label">30</div>
+                <div class="metric-legend-label">60</div>
+                <div class="metric-legend-label">90</div>
+            `;
+            fullscreenLegendLabels.innerHTML = `
                 <div class="metric-legend-label">0</div>
                 <div class="metric-legend-label">30</div>
                 <div class="metric-legend-label">60</div>
@@ -1461,9 +2680,16 @@ function updateLegend() {
         case 'pressure':
             legendTitle.textContent = `Pressure (${currentUnit === 'metric' ? 'kPa' : 'inHg'})`;
             legendScale.style.background = 'linear-gradient(to right, #6c3483, #8e44ad, #bb8fce)';
+            fullscreenLegendTitle.textContent = `Pressure (${currentUnit === 'metric' ? 'kPa' : 'inHg'})`;
+            fullscreenLegendScale.style.background = 'linear-gradient(to right, #6c3483, #8e44ad, #bb8fce)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
+                    <div class="metric-legend-label">96</div>
+                    <div class="metric-legend-label">100</div>
+                    <div class="metric-legend-label">104</div>
+                `;
+                fullscreenLegendLabels.innerHTML = `
                     <div class="metric-legend-label">96</div>
                     <div class="metric-legend-label">100</div>
                     <div class="metric-legend-label">104</div>
@@ -1474,12 +2700,19 @@ function updateLegend() {
                     <div class="metric-legend-label">29.5</div>
                     <div class="metric-legend-label">30.7</div>
                 `;
+                fullscreenLegendLabels.innerHTML = `
+                    <div class="metric-legend-label">28.3</div>
+                    <div class="metric-legend-label">29.5</div>
+                    <div class="metric-legend-label">30.7</div>
+                `;
             }
             break;
             
         case 'visibility':
             legendTitle.textContent = `Visibility (${currentUnit === 'metric' ? 'km' : 'mi'})`;
             legendScale.style.background = 'linear-gradient(to right, #b9770e, #d68910, #f39c12, #f8c471)';
+            fullscreenLegendTitle.textContent = `Visibility (${currentUnit === 'metric' ? 'km' : 'mi'})`;
+            fullscreenLegendScale.style.background = 'linear-gradient(to right, #b9770e, #d68910, #f39c12, #f8c471)';
             
             if (currentUnit === 'metric') {
                 legendLabels.innerHTML = `
@@ -1488,8 +2721,20 @@ function updateLegend() {
                     <div class="metric-legend-label">10</div>
                     <div class="metric-legend-label">20</div>
                 `;
+                fullscreenLegendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">5</div>
+                    <div class="metric-legend-label">10</div>
+                    <div class="metric-legend-label">20</div>
+                `;
             } else {
                 legendLabels.innerHTML = `
+                    <div class="metric-legend-label">0</div>
+                    <div class="metric-legend-label">3.1</div>
+                    <div class="metric-legend-label">6.2</div>
+                    <div class="metric-legend-label">12.4</div>
+                `;
+                fullscreenLegendLabels.innerHTML = `
                     <div class="metric-legend-label">0</div>
                     <div class="metric-legend-label">3.1</div>
                     <div class="metric-legend-label">6.2</div>
@@ -1752,6 +2997,12 @@ function updateMapMarkers() {
     Object.keys(tempMarkers).forEach(cityKey => {
         createOrUpdateMarker(cityKey);
     });
+    
+    if (fullscreenMap) {
+        Object.keys(fullscreenTempMarkers).forEach(cityKey => {
+            createOrUpdateFullscreenMarker(cityKey);
+        });
+    }
 }
 
 // Setup the weather visualizer
@@ -1767,6 +3018,9 @@ function setupVisualizer() {
         if (city && city.lat && city.lng) {
             // Center map on selected city
             map.setView([city.lat, city.lng], 10);
+            if (fullscreenMap) {
+                fullscreenMap.setView([city.lat, city.lng], 10);
+            }
         }
         
         // Update the forecast for the selected city
@@ -1785,6 +3039,15 @@ function setupVisualizer() {
         }
         if (event.target === document.getElementById('weatherPopup')) {
             document.getElementById('weatherPopup').style.display = 'none';
+        }
+        if (event.target === document.getElementById('metricsSummaryPopup')) {
+            document.getElementById('metricsSummaryPopup').style.display = 'none';
+        }
+        if (event.target === document.getElementById('compareModal')) {
+            closeCompareModal();
+        }
+        if (event.target === document.getElementById('fullscreenMapModal')) {
+            closeFullscreenMap();
         }
     });
     
@@ -1829,7 +3092,7 @@ async function fetchVisualizerData() {
         
         const html = await response.text();
         const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
+        const doc = parser.parseFromString(html, "text/html");
         const table = doc.querySelector('table.table-striped');
         
         if (table) {
@@ -1842,6 +3105,9 @@ async function fetchVisualizerData() {
             if (metrics) {
                 currentCityMetrics[selectedCity] = metrics;
                 createOrUpdateMarker(selectedCity);
+                if (fullscreenMap) {
+                    createOrUpdateFullscreenMarker(selectedCity);
+                }
             }
         } else {
             throw new Error('Weather table not found in the response');
@@ -1854,75 +3120,6 @@ async function fetchVisualizerData() {
         loadingElement.style.display = 'none';
         fetchBtn.disabled = false;
     }
-}
-
-// Update visualizer cards when unit changes
-function updateVisualizerCards() {
-    const cards = document.querySelectorAll('.visual-card');
-    cards.forEach(card => {
-        const header = card.getAttribute('data-header');
-        const data = visualizerChartData[header];
-        if (!data) return;
-        
-        let displayValue = data.currentValue;
-        let displayUnit = data.unit;
-        
-        if (currentUnit === 'imperial') {
-            if (header.includes('Temperature')) {
-                displayValue = displayValue * 9/5 + 32;
-                displayUnit = '°F';
-            } else if (header.includes('Wind Speed')) {
-                displayValue = displayValue * 0.621371;
-                displayUnit = 'mph';
-            } else if (header.includes('Visibility')) {
-                displayValue = displayValue * 0.621371;
-                displayUnit = 'mi';
-            } else if (header.includes('Pressure')) {
-                displayValue = displayValue * 0.2953; // kPa to inHg
-                displayUnit = 'inHg';
-            }
-        }
-        
-        // Apply color based on value (for temperature)
-        let valueColor = '#2c3e50'; // Default text color
-        if (header.includes('Temperature')) {
-            valueColor = getTempColor(data.currentValue);
-        } else if (header.includes('Humidity')) {
-            // Dark green to light green for humidity
-            const hue = 120 - (data.currentValue * 0.6); // 120 is green in HSL
-            const lightness = 20 + (data.currentValue * 0.6);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        } else if (header.includes('Wind Speed')) {
-            // Dark blue to light blue for wind speed
-            const hue = 240;
-            const lightness = 20 + (data.currentValue * 0.8);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        } else if (header.includes('Pressure')) {
-            // Dark purple to light purple for pressure
-            const hue = 280;
-            const lightness = 20 + (data.currentValue * 0.8);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        } else if (header.includes('Visibility')) {
-            // Dark orange to light orange for visibility
-            const hue = 30;
-            const lightness = 20 + (data.currentValue * 2);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        }
-        
-        const metricName = header.replace(/\([^)]+\)/, '').trim();
-        
-        card.innerHTML = `
-            <div class="visual-card-header">
-                <h3 title="${metricName}">${metricName}</h3>
-                <div class="current-value" style="color: ${valueColor}">${displayValue.toFixed(1)}</div>
-                <div class="unit">${displayUnit}</div>
-            </div>
-        `;
-        
-        card.addEventListener('click', () => {
-            openVisualizerModal(header);
-        });
-    });
 }
 
 // Process table data and create visual cards for the visualizer
@@ -2023,58 +3220,19 @@ function processAndCreateVisualizerCards(table, cityName) {
         card.setAttribute('data-header', header);
         
         const unitMatch = header.match(/\(([^)]+)\)/);
-        let displayUnit = unitMatch ? unitMatch[1] : '';
-        let displayValue = currentValue;
-        
-        if (currentUnit === 'imperial') {
-            if (header.includes('Temperature')) {
-                displayValue = displayValue * 9/5 + 32;
-                displayUnit = '°F';
-            } else if (header.includes('Wind Speed')) {
-                displayValue = displayValue * 0.621371;
-                displayUnit = 'mph';
-            } else if (header.includes('Visibility')) {
-                displayValue = displayValue * 0.621371;
-                displayUnit = 'mi';
-            } else if (header.includes('Pressure')) {
-                displayValue = displayValue * 0.2953;
-                displayUnit = 'inHg';
-            }
-        }
+        const displayUnit = unitMatch ? unitMatch[1] : '';
+        const displayValue = currentValue;
         
         const metricName = header.replace(/\([^)]+\)/, '').trim();
-
-        // Apply color based on value (for temperature)
-        let valueColor = '#2c3e50'; // Default text color
-        if (header.includes('Temperature')) {
-            valueColor = getTempColor(currentValue);
-        } else if (header.includes('Humidity')) {
-            // Dark green to light green for humidity
-            const hue = 120 - (currentValue * 0.6); // 120 is green in HSL
-            const lightness = 20 + (currentValue * 0.6);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        } else if (header.includes('Wind Speed')) {
-            // Dark blue to light blue for wind speed
-            const hue = 240;
-            const lightness = 20 + (currentValue * 0.8);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        } else if (header.includes('Pressure')) {
-            // Dark purple to light purple for pressure
-            const hue = 280;
-            const lightness = 20 + (currentValue * 0.8);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        } else if (header.includes('Visibility')) {
-            // Dark orange to light orange for visibility
-            const hue = 30;
-            const lightness = 20 + (currentValue * 2);
-            valueColor = `hsl(${hue}, 80%, ${lightness}%)`;
-        }
 
         card.innerHTML = `
             <div class="visual-card-header">
                 <h3 title="${metricName}">${metricName}</h3>
-                <div class="current-value" style="color: ${valueColor}">${displayValue.toFixed(1)}</div>
+                <div class="current-value">${displayValue.toFixed(1)}</div>
                 <div class="unit">${displayUnit}</div>
+                <div class="sparkline-container">
+                    <canvas id="sparkline-${header.replace(/[^a-zA-Z0-9]/g, '-')}"></canvas>
+                </div>
             </div>
         `;
 
@@ -2083,6 +3241,19 @@ function processAndCreateVisualizerCards(table, cityName) {
         });
 
         document.getElementById('visualizerGrid').appendChild(card);
+        
+        // Create sparkline chart
+        createSparklineChart(
+            `sparkline-${header.replace(/[^a-zA-Z0-9]/g, '-')}`,
+            allValues.slice(-24), // Last 24 hours
+            displayValue,
+            header.includes('Temperature') ? '#e74c3c' : 
+            header.includes('Wind') ? '#3498db' : 
+            header.includes('Humidity') ? '#28b463' : 
+            header.includes('Pressure') ? '#8e44ad' : 
+            header.includes('Visibility') ? '#f39c12' : '#4361ee'
+        );
+        
         cardsCreated++;
     });
 
@@ -2092,11 +3263,51 @@ function processAndCreateVisualizerCards(table, cityName) {
     }
 }
 
-// Get color for temperature value
-function getTempColor(temp) {
-    if (temp <= 0) return '#3498db'; // Blue for negative/zero
-    if (temp <= 10) return '#b6bcb9'; // Green for near zero
-    return '#e74c3c'; // Red for positive
+// Create a sparkline chart for the visual card
+function createSparklineChart(canvasId, values, currentValue, color) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Set canvas dimensions to match container
+    const container = canvas.parentElement;
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+    
+    // Add padding to prevent cutoff
+    const padding = 2;
+    const chartWidth = canvas.width - padding * 2;
+    const chartHeight = canvas.height - padding * 2;
+    
+    // Find min and max for scaling
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = max - min || 1; // Avoid division by zero
+    
+    // Reverse the values array so newest is on left
+    const reversedValues = [...values].reverse();
+    
+    // Normalize values to fit chart height (with padding)
+    const normalizedValues = reversedValues.map(v => {
+        return ((v - min) / range) * chartHeight;
+    });
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw sparkline - newest data on left
+    ctx.beginPath();
+    ctx.moveTo(padding, padding + chartHeight - normalizedValues[0]);
+    
+    const step = chartWidth / (normalizedValues.length - 1);
+    for (let i = 1; i < normalizedValues.length; i++) {
+        ctx.lineTo(padding + i * step, padding + chartHeight - normalizedValues[i]);
+    }
+    
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
 }
 
 // Open modal with expanded chart view
@@ -2107,24 +3318,8 @@ function openVisualizerModal(header) {
     // Update modal content
     document.getElementById('visualizerModalTitle').textContent = `${header}  -  ${data.city} at ${data.currentHour} till next hour`;
     
-    let displayValue = data.currentValue;
-    let displayUnit = data.unit;
-    
-    if (currentUnit === 'imperial') {
-        if (header.includes('Temperature')) {
-            displayValue = displayValue * 9/5 + 32;
-            displayUnit = '°F';
-        } else if (header.includes('Wind Speed')) {
-            displayValue = displayValue * 0.621371;
-            displayUnit = 'mph';
-        } else if (header.includes('Visibility')) {
-            displayValue = displayValue * 0.621371;
-            displayUnit = 'mi';
-        } else if (header.includes('Pressure')) {
-            displayValue = displayValue * 0.2953; // kPa to inHg
-            displayUnit = 'inHg';
-        }
-    }
+    const displayValue = data.currentValue;
+    const displayUnit = data.unit;
     
     document.getElementById('visualizerModalCurrentValue').textContent = 
         `${displayValue.toFixed(1)} ${displayUnit}`;
@@ -2142,23 +3337,7 @@ function openVisualizerModal(header) {
         chartLabels.shift(); // Remove first label
         chartLabels.push(""); // Add empty string to maintain length
     }
-    let chartUnit = data.unit;
-    
-    if (currentUnit === 'imperial') {
-        if (header.includes('Temperature')) {
-            chartData = chartData.map(v => v * 9/5 + 32);
-            chartUnit = '°F';
-        } else if (header.includes('Wind Speed')) {
-            chartData = chartData.map(v => v * 0.621371);
-            chartUnit = 'mph';
-        } else if (header.includes('Visibility')) {
-            chartData = chartData.map(v => v * 0.621371);
-            chartUnit = 'mi';
-        } else if (header.includes('Pressure')) {
-            chartData = chartData.map(v => v * 0.2953);
-            chartUnit = 'inHg';
-        }
-    }
+    const chartUnit = data.unit;
     
     // Find the index where the day changes (midnight)
     const midnightIndex = chartLabels.findIndex(label => label === '00:00');
@@ -2166,23 +3345,21 @@ function openVisualizerModal(header) {
     // Highlight current hour in the chart
     const currentIndex = chartLabels.indexOf(data.currentHour);
     const backgroundColors = chartLabels.map((labels, index) => 
-        index === currentIndex ? 'rgba(255, 99, 132, 0.7)' : 'rgba(54, 162, 235, 0.7)'
+        index === currentIndex ? 'rgba(255, 87, 34, 0.7)' : 'rgba(0, 150, 136, 0.7)'
     );
     
     // Set bar color based on metric type
     let barColor = 'rgba(54, 162, 235, 0.7)'; // Default blue
-    if (header.includes('Temperature')) {
-        barColor = 'rgba(255, 99, 132, 0.7)'; // Red for temperature
-    } else if (header.includes('Humidity')) {
-        barColor = 'rgba(75, 192, 192, 0.7)'; // Green for humidity
-    } else if (header.includes('Pressure')) {
-        barColor = 'rgba(153, 102, 255, 0.7)'; // Purple for pressure
-    } else if (header.includes('Visibility')) {
-        barColor = 'rgba(255, 159, 64, 0.7)'; // Orange for visibility
-    }
     
+    // Ensure we have at least one data point to plot
+    if (chartData.length === 0) {
+        // If no data, create a dummy chart with zero values
+        chartData = Array(chartLabels.length).fill(0);
+        backgroundColors.fill('rgba(200, 200, 200, 0.7)');
+    }
+
     visualizerModalChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: chartLabels,
             datasets: [{
@@ -2203,7 +3380,7 @@ function openVisualizerModal(header) {
                     font: { size: 18 }
                 },
                 legend: {
-                    display: false
+                    display: false,
                 },
                 tooltip: {
                     callbacks: {
@@ -2216,18 +3393,8 @@ function openVisualizerModal(header) {
                     annotations: {
                         line1: {
                             type: 'line',
-                            yMin: currentUnit === 'metric' ? data.currentValue : 
-                                header.includes('Temperature') ? data.currentValue * 9/5 + 32 :
-                                header.includes('Wind Speed') ? data.currentValue * 0.621371 :
-                                header.includes('Visibility') ? data.currentValue * 0.621371 :
-                                header.includes('Pressure') ? data.currentValue * 0.2953 :
-                                data.currentValue,
-                            yMax: currentUnit === 'metric' ? data.currentValue : 
-                                header.includes('Temperature') ? data.currentValue * 9/5 + 32 :
-                                header.includes('Wind Speed') ? data.currentValue * 0.621371 :
-                                header.includes('Visibility') ? data.currentValue * 0.621371 :
-                                header.includes('Pressure') ? data.currentValue * 0.2953 :
-                                data.currentValue,
+                            yMin: data.currentValue,
+                            yMax: data.currentValue,
                             borderColor: 'rgb(255, 99, 132)',
                             borderWidth: 2,
                             borderDash: [6, 6],
@@ -2242,7 +3409,7 @@ function openVisualizerModal(header) {
                             type: 'line',
                             xMin: midnightIndex !== -1 ? midnightIndex : 0,
                             xMax: midnightIndex !== -1 ? midnightIndex : 0,
-                            borderColor: 'rgb(0, 0, 0)',
+                            borderColor: 'rgb(20, 20, 20)',
                             borderWidth: 2,
                             label: {
                                 content: midnightIndex !== -1 ? '' : '',
@@ -2255,7 +3422,7 @@ function openVisualizerModal(header) {
             },
             scales: {
                 y: { 
-                    beginAtZero: false,
+                    beginAtZero: true,
                     title: { 
                         display: true, 
                         text: chartUnit
@@ -2266,9 +3433,17 @@ function openVisualizerModal(header) {
                     offset: true,
                     ticks: {
                         callback: function(value) {
-                            // Highlight current hour in x-axis labels
-                                                        return this.getLabelForValue(value);
+                            return this.getLabelForValue(value);
                         }
+                    }
+                }
+            },
+            onClick: (e, activeElements) => {
+                if (activeElements.length > 0) {
+                    const clickedIndex = activeElements[0].index;
+                    const clickedLabel = chartLabels[clickedIndex];
+                    if (clickedLabel === data.currentHour) {
+                        showMetricsSummary(data.city, data.currentHour);
                     }
                 }
             }
@@ -2277,6 +3452,53 @@ function openVisualizerModal(header) {
 
     // Show modal
     document.getElementById('visualizerModal').style.display = 'flex';
+}
+
+// Show metrics summary popup for current hour
+function showMetricsSummary(cityName, currentHour) {
+    const popup = document.getElementById('metricsSummaryPopup');
+    const popupTitle = document.getElementById('metricsSummaryTitle');
+    const popupContent = document.getElementById('metricsSummaryContent');
+    
+    // Set popup title
+    popupTitle.textContent = `${cityName} Weather Metrics at ${currentHour}`;
+    
+    // Create popup content
+    let contentHTML = '';
+    
+    // Get all metrics for this city at current hour
+    Object.keys(visualizerChartData).forEach(header => {
+        const data = visualizerChartData[header];
+        if (data.city === cityName && data.currentHour === currentHour) {
+            const displayValue = data.currentValue;
+            const displayUnit = data.unit;
+            
+            const metricName = header.replace(/\([^)]+\)/, '').trim();
+            
+            // Get appropriate icon for each metric
+            let icon = 'info-circle';
+            if (metricName.includes('Temperature')) icon = 'temperature-low';
+            if (metricName.includes('Wind')) icon = 'wind';
+            if (metricName.includes('Humidity')) icon = 'tint';
+            if (metricName.includes('Pressure')) icon = 'tachometer-alt';
+            if (metricName.includes('Visibility')) icon = 'eye';
+            
+            contentHTML += `
+                <div class="metrics-summary-row">
+                    <div class="metrics-summary-icon">
+                        <i class="fas fa-${icon}"></i>
+                    </div>
+                    <div class="metrics-summary-details">
+                        <div class="metrics-summary-label">${metricName}</div>
+                        <div class="metrics-summary-value">${displayValue.toFixed(1)} ${displayUnit}</div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    popupContent.innerHTML = contentHTML;
+    popup.style.display = 'block';
 }
 
 // Close the visualizer modal
@@ -2444,48 +3666,87 @@ function renderWeatherDays(forecasts) {
     const weekDaysContainer = document.getElementById('weekDays');
     weekDaysContainer.innerHTML = '';
     
-    // Group into day/night pairs (assuming even number of forecasts)
+    // Get today's date and day of week
+    const today = new Date();
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
+    // Group forecasts into day/night pairs and ensure we have 7 days
+    const dailyForecasts = [];
     for (let i = 0; i < Math.min(14, forecasts.length); i += 2) {
         const dayForecast = forecasts[i];
-        const nightForecast = forecasts[i+1] || forecasts[i]; // Fallback if no night forecast
+        const nightForecast = forecasts[i+1] || forecasts[i];
+        dailyForecasts.push({
+            dayForecast,
+            nightForecast
+        });
+    }
+    
+    // Ensure we have exactly 7 days (pad with empty forecasts if needed)
+    while (dailyForecasts.length < 7) {
+        dailyForecasts.push({
+            dayForecast: createEmptyForecast(daysOfWeek[(today.getDay() + dailyForecasts.length) % 7]),
+            nightForecast: createEmptyForecast(daysOfWeek[(today.getDay() + dailyForecasts.length) % 7] + ' night')
+        });
+    }
+    
+    // Display 7 days starting from today
+    for (let i = 0; i < 7; i++) {
+        const dayIndex = (today.getDay() + i) % 7;
+        const dayName = daysOfWeek[dayIndex];
+        const forecast = dailyForecasts[i] || {
+            dayForecast: createEmptyForecast(dayName),
+            nightForecast: createEmptyForecast(dayName + ' night')
+        };
         
         const dayBox = document.createElement('div');
         dayBox.className = 'day-box';
-        dayBox.id = `day-${dayForecast.time.replace(/\s/g, '-')}`;
+        dayBox.id = `day-${dayName.replace(/\s/g, '-')}`;
         
-        // Use day forecast for color, but average with night if available
-        const outdoorScore = nightForecast ? 
-            Math.round((dayForecast.outdoorScore + nightForecast.outdoorScore) / 2) : 
-            dayForecast.outdoorScore;
+        // Calculate outdoor score
+        const outdoorScore = forecast.nightForecast ? 
+            Math.round((forecast.dayForecast.outdoorScore + forecast.nightForecast.outdoorScore) / 2) : 
+            forecast.dayForecast.outdoorScore;
         
-        // Set gradient based on outdoor score (using HSL color space)
+        // Set gradient based on outdoor score
         const hue = (outdoorScore * 1.2).toString(10);
         dayBox.style.background = `linear-gradient(135deg, hsl(${hue}, 80%, 50%), hsl(${hue}, 80%, 40%))`;
         
-        // Extract day name (e.g., "Monday" from "Monday night")
-        const dayName = dayForecast.time.replace(/\s*(day|night|morning|afternoon|evening)$/i, '');
-        
         dayBox.innerHTML = `
             <div class="day-name">${dayName}</div>
-            <div class="weather-icon"><i class="fas fa-${dayForecast.icon}"></i></div>
-            <div class="temp-display">${dayForecast.temp}</div>
+            <div class="weather-icon"><i class="fas fa-${forecast.dayForecast.icon}"></i></div>
+            <div class="temp-display">${forecast.dayForecast.temp || '--'}</div>
         `;
         
         dayBox.addEventListener('click', () => {
-            selectDay(dayForecast.time);
-            showWeatherPopup(dayForecast, nightForecast, dayName);
+            selectDay(dayName);
+            showWeatherPopup(forecast.dayForecast, forecast.nightForecast, dayName);
         });
         
         // Store full data as dataset
         dayBox.dataset.forecast = JSON.stringify({
             dayName,
-            dayForecast,
-            nightForecast,
+            dayForecast: forecast.dayForecast,
+            nightForecast: forecast.nightForecast,
             outdoorScore
         });
         
         weekDaysContainer.appendChild(dayBox);
     }
+    
+    // Initialize heatmap with the forecast data
+    updateActivityHeatmap(forecasts);
+}
+
+// Helper function to create empty forecast when data is missing
+function createEmptyForecast(time) {
+    return {
+        time: time,
+        temp: '--',
+        icon: 'question',
+        outdoorScore: 50,
+        forecastText: 'Data not available',
+        fullSummary: 'Weather data is currently unavailable for this day.'
+    };
 }
 
 // Show weather popup with forecast details
@@ -2639,6 +3900,238 @@ function showAlert(message, type = 'info') {
 }
 
 // Initialize the application when the page loads
+// Outdoor activity categories
+const outdoorActivities = [
+    { id: 'hiking', name: 'Hiking', icon: 'fa-hiking' },
+    { id: 'camping', name: 'Camping', icon: 'fa-campground' },
+    { id: 'water', name: 'Water Activities', icon: 'fa-water' },
+    { id: 'winter', name: 'Winter Sports', icon: 'fa-snowboarding' },
+    { id: 'wildlife', name: 'Wildlife Watching', icon: 'fa-binoculars' }
+];
+
+// Update the activity heatmap based on forecast data
+function updateActivityHeatmap(forecasts) {
+    const heatmapContent = document.getElementById('heatmapContent');
+    const heatmapYAxis = document.getElementById('heatmapYAxis');
+    const heatmapXAxis = document.getElementById('heatmapXAxis');
+    
+    heatmapContent.innerHTML = '';
+    heatmapYAxis.innerHTML = '';
+    heatmapXAxis.innerHTML = '';
+    
+    // Create Y-axis labels (activities)
+    outdoorActivities.forEach(activity => {
+        const yLabel = document.createElement('div');
+        yLabel.className = 'heatmap-chart-y-label';
+        yLabel.innerHTML = `<i class="fas ${activity.icon}"></i> ${activity.name}`;
+        heatmapYAxis.appendChild(yLabel);
+    });
+    
+    // Get today's date and day names
+    const today = new Date();
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+    // Create X-axis labels (days)
+    for (let i = 0; i < 7; i++) {
+        const dayIndex = (today.getDay() + i) % 7;
+        const xLabel = document.createElement('div');
+        xLabel.className = 'heatmap-chart-x-label';
+        xLabel.textContent = daysOfWeek[dayIndex];
+        heatmapXAxis.appendChild(xLabel);
+    }
+    
+    // Group forecasts into day/night pairs
+    const dailyForecasts = [];
+    for (let i = 0; i < Math.min(14, forecasts.length); i += 2) {
+        const dayForecast = forecasts[i];
+        const nightForecast = forecasts[i+1] || dayForecast;
+        dailyForecasts.push({
+            dayForecast,
+            nightForecast
+        });
+    }
+    
+    // Ensure we have 7 days of data
+    while (dailyForecasts.length < 7) {
+        dailyForecasts.push({
+            dayForecast: createEmptyForecast(''),
+            nightForecast: createEmptyForecast('')
+        });
+    }
+    
+    // Create heatmap cells for 7 days
+    outdoorActivities.forEach(activity => {
+        for (let i = 0; i < 7; i++) {
+            const forecast = dailyForecasts[i] || {
+                dayForecast: createEmptyForecast(''),
+                nightForecast: createEmptyForecast('')
+            };
+            
+            // Calculate score for this activity on this day
+            const score = calculateActivityScore(activity.id, forecast.dayForecast, forecast.nightForecast);
+            
+            // Create cell with appropriate color
+            const scoreCell = document.createElement('div');
+            scoreCell.className = 'heatmap-cell';
+            
+            // Set color based on score (0-100 scale)
+            const hue = (score * 1.2).toString(10);
+            scoreCell.style.background = `hsla(${hue}, 80%, 50%, 0.7)`;
+            scoreCell.title = `${activity.name} suitability on ${daysOfWeek[(today.getDay() + i) % 7]}: ${score}/100`;
+            
+            heatmapContent.appendChild(scoreCell);
+        }
+    });
+}
+
+// Calculate suitability score (0-100) for a specific activity based on weather
+function calculateActivityScore(activityId, dayForecast, nightForecast) {
+    const dayText = (dayForecast.forecastText + ' ' + dayForecast.fullSummary).toLowerCase();
+    const nightText = (nightForecast.forecastText + ' ' + nightForecast.fullSummary).toLowerCase();
+    const combinedText = dayText + ' ' + nightText;
+    
+    let score = 50; // Base score
+    
+    // Extract temperature (if available)
+    let temp = 15; // Default if we can't parse
+    const tempMatch = dayForecast.temp.match(/(-?\d+)/);
+    if (tempMatch) {
+        temp = parseInt(tempMatch[1]);
+    }
+    
+    // Activity-specific scoring
+    switch(activityId) {
+        case 'hiking':
+            // Ideal: 10-25°C, sunny/partly cloudy, light wind
+            // Poor: rain, snow, extreme heat/cold, high winds
+            if (temp >= 10 && temp <= 25) score += 20;
+            else if (temp > 25) score -= (temp - 25) * 2;
+            else if (temp < 10) score -= (10 - temp) * 2;
+            
+            if (dayText.includes('sunny') || dayText.includes('clear')) score += 15;
+            if (dayText.includes('partly cloudy')) score += 10;
+            if (dayText.includes('rain')) score -= 30;
+            if (dayText.includes('snow')) score -= 40;
+            if (dayText.includes('wind')) score -= 15;
+            break;
+            
+        case 'camping':
+            // Ideal: 15-25°C, clear/partly cloudy, light wind
+            // Poor: rain, storms, extreme temps, high winds
+            if (temp >= 15 && temp <= 25) score += 20;
+            else if (temp > 25) score -= (temp - 25);
+            else if (temp < 15) score -= (15 - temp);
+            
+            if (!dayText.includes('rain') && !dayText.includes('snow')) score += 15;
+            if (dayText.includes('clear') || dayText.includes('sunny')) score += 10;
+            if (dayText.includes('rain')) score -= 25;
+            if (dayText.includes('snow')) score -= 35;
+            if (dayText.includes('thunder') || dayText.includes('lightning')) score -= 30;
+            if (dayText.includes('wind')) score -= 10;
+            break;
+            
+        case 'water':
+            // Ideal: >20°C, sunny, light wind
+            // Poor: cold, rain, storms, high winds
+            if (temp >= 20) score += (temp - 15) * 2;
+            else score -= (20 - temp) * 3;
+            
+            if (dayText.includes('sunny')) score += 15;
+            if (dayText.includes('rain')) score -= 20;
+            if (dayText.includes('thunder') || dayText.includes('lightning')) score -= 30;
+            if (dayText.includes('wind')) score -= 15;
+            break;
+            
+        case 'winter':
+            // Ideal: below freezing, snow, sunny
+            // Poor: rain, above freezing, no snow
+            if (temp <= 0) score += (0 - temp) * 2;
+            else score -= temp * 3;
+            
+            if (dayText.includes('snow')) score += 25;
+            if (dayText.includes('sunny')) score += 10;
+            if (dayText.includes('rain')) score -= 30;
+            if (dayText.includes('above freezing')) score -= 20;
+            break;
+            
+        case 'wildlife':
+            // Ideal: mild temps, clear/partly cloudy, calm
+            // Poor: extreme weather, heavy rain/snow
+            if (temp >= 5 && temp <= 25) score += 15;
+            else if (temp > 25) score -= (temp - 25);
+            else if (temp < 5) score -= (5 - temp);
+            
+            if (!dayText.includes('heavy rain') && !dayText.includes('heavy snow')) score += 10;
+            if (dayText.includes('clear') || dayText.includes('sunny')) score += 10;
+            if (dayText.includes('heavy rain') || dayText.includes('heavy snow')) score -= 25;
+            if (dayText.includes('extreme')) score -= 20;
+            break;
+    }
+    
+    // Ensure score is between 0-100
+    return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+// Modify the renderWeatherDays function to call the heatmap
+function renderWeatherDays(forecasts) {
+    const weekDaysContainer = document.getElementById('weekDays');
+    weekDaysContainer.innerHTML = '';
+    // Group into day/night pairs (assuming even number of forecasts)
+    for (let i = 0; i < Math.min(14, forecasts.length); i += 2) {
+        const dayForecast = forecasts[i];
+        const nightForecast = forecasts[i+1] || forecasts[i]; // Fallback if no night forecast
+        const dayBox = document.createElement('div');
+        dayBox.className = 'day-box';
+        dayBox.id = `day-${dayForecast.time.replace(/\s/g, '-')}`;
+        // Use day forecast for color, but average with night if available
+        const outdoorScore = nightForecast ? 
+            Math.round((dayForecast.outdoorScore + nightForecast.outdoorScore) / 2) : 
+            dayForecast.outdoorScore;
+        // Set gradient based on outdoor score (using HSL color space)
+        const hue = (outdoorScore * 1.2).toString(10);
+        dayBox.style.background = `linear-gradient(135deg, hsl(${hue}, 80%, 50%), hsl(${hue}, 80%, 40%))`;
+        // Extract day name (e.g., "Monday" from "Monday night")
+        const dayName = dayForecast.time.replace(/\s*(day|night|morning|afternoon|evening)$/i, '');
+        dayBox.innerHTML = `
+            <div class="day-name">${dayName}</div>
+            <div class="weather-icon"><i class="fas fa-${dayForecast.icon}"></i></div>
+            <div class="temp-display">${dayForecast.temp}</div>
+        `;
+        dayBox.addEventListener('click', () => {
+            selectDay(dayForecast.time);
+            showWeatherPopup(dayForecast, nightForecast, dayName);
+        });
+        // Store full data as dataset
+        dayBox.dataset.forecast = JSON.stringify({
+            dayName,
+            dayForecast,
+            nightForecast,
+            outdoorScore
+        });
+        weekDaysContainer.appendChild(dayBox);
+    }
+    
+    // Initialize heatmap with the forecast data
+    updateActivityHeatmap(forecasts);
+}
+// Information button functionality
+document.getElementById('infoButton').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('infoPanel').style.display = 'block';
+});
+
+document.getElementById('closeInfoPanel').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('infoPanel').style.display = 'none';
+});
+
+// Close panel when clicking outside
+document.addEventListener('click', function(e) {
+    if (!document.getElementById('infoPanel').contains(e.target) && 
+        e.target !== document.getElementById('infoButton')) {
+        document.getElementById('infoPanel').style.display = 'none';
+    }
+});
 window.onload = init;
 </script>
 </body>
