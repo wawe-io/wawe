@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --primary: #81D8D0;
+    --primary: #3f37c9;
     --secondary: #3f37c9;
     --success: #4cc9f0;
     --danger: #f72585;
@@ -47,7 +47,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: var(--primary);
+    background-color:rgba(238, 233, 233, 0.818);
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 1px 3px rgba(0,0,0,.1);
@@ -460,6 +460,9 @@ body {
     font-weight: 700;
     color: var(--text);
     margin-bottom: 20px;
+    padding-top: 15px;
+    text-align: center; /* Add this line to center the text */
+    width: 100%; /* Ensure it takes full width */
 }
 
 .glass-card {
@@ -1308,15 +1311,16 @@ body {
 .heatmap-cell {
     width: 95%;
     height: 100%;
-    border-radius: 4px;
+    border-radius: 10px;
 }
 
 /* Heatmap Legend */
 .heatmap-legend {
-    position: absolute;
+   
     bottom: 10px;
     right: 10px;
-    background: rgba(255,255,255,0.9);
+    top: 10px;
+    background: rgba(255, 255, 255, 0.9);
     padding: 8px;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
@@ -1327,7 +1331,7 @@ body {
 }
 
 .heatmap-legend-title {
-    font-size: 10px;
+    font-size: 15px;
     font-weight: 600;
     margin-bottom: 5px;
     color: #2b2d42;
@@ -1336,7 +1340,7 @@ body {
 .heatmap-legend-scale {
     display: flex;
     height: 15px;
-    width: 150px;
+    width: 100%;
     border-radius: 3px;
     overflow: hidden;
     margin-bottom: 3px;
@@ -1350,7 +1354,7 @@ body {
 }
 
 .heatmap-legend-label {
-    font-size: 9px;
+    font-size: 15px;
     color: #2b2d42;
 }
 
@@ -1404,7 +1408,7 @@ body {
 }
 
 .heatmap-chart-x-label {
-    font-size: 12px;
+    font-size: 15px;
     text-align: center;
 }
 .info-button {
@@ -2824,7 +2828,7 @@ function extractCityMetrics(table) {
     const currentHour = new Date().getHours().toString().padStart(2, '0') + ":00";
     const currentRow = rows.find(row => 
         row.querySelector('td')?.textContent.trim() === currentHour
-    ) || rows[0]; // Fallback to first row if current hour not found
+    ) // Fallback to first row if current hour not found
     
     if (!currentRow) throw new Error('No data rows found');
     
