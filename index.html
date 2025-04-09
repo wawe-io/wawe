@@ -158,7 +158,7 @@ body {
     align-items: center;
     color: white;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 16px;
     transform: translate(-50%, -50%);
     text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
@@ -1527,16 +1527,13 @@ body {
                 <div class="map-controls-group">
                     <label class="map-controls-label">Map Style</label>
                     <select class="map-layer-select" id="mapLayerSelect">
-                        <option value="osm" selected>OpenStreetMap</option>
-                        <option value="osm-classic">OSM Classic</option>
-                        <option value="osm-humanitarian">OSM Humanitarian</option>
-                        <option value="carto-positron">CartoDB Positron</option>
-                        <option value="carto-dark">CartoDB Dark</option>
-                        <option value="stamen-toner">Stamen Toner</option>
-                        <option value="stamen-terrain">Stamen Terrain</option>
-                        <option value="stamen-watercolor">Stamen Watercolor</option>
-                        <option value="esri-imagery">Esri Imagery</option>
-                        <option value="esri-topo">Esri Topo</option>
+                        <option value="osm" selected>Classic</option>
+                        <option value="osm-classic">Detailed</option>
+                        <option value="osm-humanitarian">Humanitarian - Track and Fields</option>
+                        <option value="carto-positron">Light mode</option>
+                        <option value="carto-dark">Dark mode</option>
+                        <option value="esri-imagery">Satellite</option>
+                        <option value="esri-topo">Topography</option>
                     </select>
                 </div>
                 <div class="map-controls-group">
@@ -1694,9 +1691,6 @@ body {
                     <option value="osm-humanitarian">OSM Humanitarian</option>
                     <option value="carto-positron">CartoDB Positron</option>
                     <option value="carto-dark">CartoDB Dark</option>
-                    <option value="stamen-toner">Stamen Toner</option>
-                    <option value="stamen-terrain">Stamen Terrain</option>
-                    <option value="stamen-watercolor">Stamen Watercolor</option>
                     <option value="esri-imagery">Esri Imagery</option>
                     <option value="esri-topo">Esri Topo</option>
                 </select>
@@ -1828,18 +1822,6 @@ const tileLayers = {
     }),
     'carto-dark': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>'
-    }),
-    'stamen-toner': L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-        subdomains: 'abcd'
-    }),
-    'stamen-terrain': L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-        subdomains: 'abcd'
-    }),
-    'stamen-watercolor': L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-        subdomains: 'abcd'
     }),
     'esri-imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
