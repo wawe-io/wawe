@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<!--
+================================================================================
+Weather Analysis for Weekly Events (W.A.W.E.) - Canada
+================================================================================
+File:       Dashboard.html
+Author:     Digivjay Kharecha and Clayton D'Souza
+Course:     CS 837 - Information Visualization
+Project:    Final Project for Course
+Inst.:      University of Regina
+Professor:  Dr. Orland Hoeber
+-->
 <html>
 <head>
 <title>Weather Dashboard with Multiple Metrics</title>
@@ -892,6 +903,7 @@ body {
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s;
+    
 }
 .compare-city-checkbox:checked + .compare-city-label {
     background: var(--primary);
@@ -1794,12 +1806,13 @@ function closeCompareModal() {
  * @function updateCompareChart
  * @returns {void}
  */
-function updateCompareChart() {
+ function updateCompareChart() {
     const metric = document.getElementById('compareMetricSelect').value;
     const ctx = document.getElementById('compareChart').getContext('2d');
     const citiesToCompare = selectedCitiesForComparison.filter(cityKey => 
         currentCityMetrics[cityKey] && currentCityMetrics[cityKey][getMetricKey(metric)]
     );
+    
     if (citiesToCompare.length === 0) {
         if (compareChart) compareChart.destroy();
         document.getElementById('compareChart').parentElement.innerHTML = `
@@ -1811,6 +1824,7 @@ function updateCompareChart() {
         `;
         return;
     }
+
     const labels = citiesToCompare.map(cityKey => cityData[cityKey].name);
     const data = citiesToCompare.map(cityKey => {
         const metrics = currentCityMetrics[cityKey];
@@ -1819,9 +1833,11 @@ function updateCompareChart() {
     const unit = metricUnits[metric].metric;
     const barColor = 'rgba(54, 162, 235, 0.7)';
     const borderColor = 'rgba(54, 162, 235, 1)';
+
     if (compareChart) {
         compareChart.destroy();
     }
+
     compareChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -1840,7 +1856,7 @@ function updateCompareChart() {
             plugins: {
                 title: { 
                     display: true, 
-                    text: `Comparison of ${metricNames[metric]} Across Cities`,
+                    text: `Comparison of ${metricNames[metric]} Across Cities (Average Values)`,
                     font: { size: 18 }
                 },
                 tooltip: {
@@ -1861,16 +1877,14 @@ function updateCompareChart() {
                 }
             },
             onClick: (e, activeElements) => {
-    if (activeElements.length > 0) {
-        const clickedIndex = activeElements[0].index;
-        const clickedLabel = chartLabels[clickedIndex];
-        if (clickedLabel === primaryData.currentHour) {
-            const selectedCity = document.getElementById('visualizerCitySelect').value;
-            const city = cityData[selectedCity];
-            showMetricsSummary(city.name, primaryData.currentHour);
-        }
-    }
-}
+                if (activeElements.length > 0) {
+                    const clickedIndex = activeElements[0].index;
+                    const cityKey = selectedCitiesForComparison[clickedIndex];
+                    const city = cityData[cityKey];
+                    const currentHour = new Date().getHours().toString().padStart(2, '0') + ":00";
+                    showMetricsSummary(city.name, currentHour);
+                }
+            }
         }
     });
 }
